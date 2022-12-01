@@ -1,0 +1,24 @@
+fragment UserFragment on User {
+  id
+  gioiTinh
+  biDanh
+  ngaySinh
+  noiSinh
+  queQuan
+  noiThuongTruTruocDo
+  ngayDangKiThuongTru
+  ngheNghiep
+  noiLamViec
+  danToc
+  avatar {
+    fileUrl
+    filePath
+  }
+  ghiChu
+  canCuocCongDan
+  soDienThoai
+  vaiTroNguoiDung
+  vaiTroThanhVien
+  daDangKi
+  ten
+}

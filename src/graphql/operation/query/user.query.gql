@@ -1,0 +1,12 @@
+query User {
+  xemThongTinNguoiDung {
+    ok
+    error {
+      message
+      mainReason
+    }
+    user {
+      ...UserFragment
+    }
+  }
+}

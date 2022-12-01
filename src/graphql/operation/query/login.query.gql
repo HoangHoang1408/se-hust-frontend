@@ -1,0 +1,10 @@
+query Login($input: LoginInput!) {
+  login(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+    accessToken
+  }
+}

@@ -1,0 +1,9 @@
+mutation Register($input:RegisterUserInput!){
+  registerUser(input: $input){
+    ok
+    error {
+      mainReason
+      message
+    }    
+  }
+}

@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+src/graphql/generated/*
+./src/graphql/generated/*
+/src/graphql/generated/*
