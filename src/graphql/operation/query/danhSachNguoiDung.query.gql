@@ -1,0 +1,16 @@
+query DanhSachNguoiDung($input: XemDanhSachNguoiDungInput!) {
+  xemDanhSachNguoiDung(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+    paginationOutput {
+      totalPages
+      totalResults
+    }
+    users {
+      ...UserFragment
+    }
+  }
+}

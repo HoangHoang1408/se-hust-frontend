@@ -1,9 +1,9 @@
-query Login($input: LoginInput!) {
+query Login($input:LoginInput!){
   login(input: $input) {
     ok
     error {
-      mainReason
       message
+      mainReason
     }
     accessToken
   }
