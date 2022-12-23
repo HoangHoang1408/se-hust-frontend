@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler } from "react";
-import { loadingWhite } from "../images";
+import { loadingWhite } from "../../images";
 
 type Props = {
   loading: boolean;

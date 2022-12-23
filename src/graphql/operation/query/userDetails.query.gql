@@ -1,0 +1,12 @@
+query UserDetails($input: XemThongTinNguoiDungChoQuanLiInput!) {
+  xemThongTinNguoiDungChoQuanLi(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+    user {
+      ...UserFragment
+    }
+  }
+}

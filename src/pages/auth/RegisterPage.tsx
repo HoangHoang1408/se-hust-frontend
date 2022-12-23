@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { FormInput, FormInputProps } from "../../components/form/FormInput";
-import LoadingButton from "../../components/LoadingButton";
+import LoadingButton from "../../components/form/LoadingButton";
 import { useRegisterMutation } from "../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../utils/getApolloErrorMessage";
 interface SignUpInputForm {

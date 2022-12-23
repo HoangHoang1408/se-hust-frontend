@@ -8,6 +8,9 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import NormalUserHomePage from "./pages/nguoiDan/NormalUserHomePage";
 import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
+import AddUser from "./pages/quanLi/user/AddUser";
+import EditUser from "./pages/quanLi/user/EditUser";
+import UserDetails from "./pages/quanLi/user/UserDetails";
 import UserManager from "./pages/quanLi/user/UserManager";
 
 function App() {
@@ -19,7 +22,12 @@ function App() {
           <Route path="/" element={<NormalUserHomePage />} />
           <Route path="/manager" element={<ManagerLayout />}>
             <Route index element={<ManagerHomePage />} />
-            <Route path="users" element={<UserManager />} />
+            <Route path="users">
+              <Route index element={<UserManager />} />
+              <Route path="add" element={<AddUser />} />
+              <Route path=":id" element={<UserDetails />} />
+              <Route path="edit/:id" element={<EditUser />} />
+            </Route>
           </Route>
         </Route>
         <Route path="/auth">

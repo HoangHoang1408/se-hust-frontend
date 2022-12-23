@@ -5,7 +5,7 @@ import { userVar } from "../apollo/reactiveVar/loginStatusVar";
 import { VaitroNguoiDung } from "../graphql/generated/schema";
 
 import { MenuAlt1Icon, UserGroupIcon } from "@heroicons/react/outline";
-import DesktopSidebar from "../components/pages/adminPage/DesktopSidebar";
+import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
 
 const navigation = [
   // {

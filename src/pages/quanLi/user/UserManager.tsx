@@ -3,6 +3,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
+import TextSearchInput from "../../../components/form/TextSearchInput";
 import Loading from "../../../components/Loading";
 import PaginationNav from "../../../components/PaginationNav";
 import { useDanhSachNguoiDungLazyQuery } from "../../../graphql/generated/schema";
@@ -34,7 +35,10 @@ const UserManager = (props: Props) => {
       },
     }
   );
-  const [byState, setByState] = useState<ByState>({});
+  const [byState, setByState] = useState<ByState>({
+    hoTen: undefined,
+    canCuocCongDan: undefined,
+  });
   const [page, setPage] = useState<number>(1);
   useEffect(() => {
     let { hoTen, canCuocCongDan } = byState;
@@ -52,9 +56,6 @@ const UserManager = (props: Props) => {
     });
   }, [byState, page]);
   const users = userData?.xemDanhSachNguoiDung.users;
-  useEffect(() => {
-    setPage(1);
-  }, [byState]);
   const columns = useMemo(() => {
     return [
       {
@@ -62,7 +63,6 @@ const UserManager = (props: Props) => {
         // @ts-ignore
         accessor: (row) => row["id"],
       },
-
       {
         Header: "Họ tên",
         // @ts-ignore
@@ -96,7 +96,6 @@ const UserManager = (props: Props) => {
         Header: "Đã đăng kí",
         // @ts-ignore
         accessor: (row) => {
-          console.log(row);
           return row["daDangKi"] ? "Đã đăng kí" : "Chưa đăng kí";
         },
       },
@@ -136,11 +135,19 @@ const UserManager = (props: Props) => {
             <div className="space-x-2">
               <button
                 onClick={() => {
-                  navigate(`/admin/users/${data["id"]}`);
+                  navigate(`/manager/users/${data["id"]}`);
                 }}
                 className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
               >
                 Chi tiết
+              </button>
+              <button
+                onClick={() => {
+                  navigate(`/manager/users/edit/${data["id"]}`);
+                }}
+                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
+              >
+                Cập nhật
               </button>
             </div>
           );
@@ -161,18 +168,20 @@ const UserManager = (props: Props) => {
               Quản lí người dùng
             </h1>
           </div>
-          {/* <div className="mt-4 sm:mt-0 sm:ml-16 flex space-x-3">
+          <div className="mt-4 sm:mt-0 sm:ml-16 flex space-x-3">
             <TextSearchInput
-              labelText="Tên"
-              setText={(v) => setByState((pre) => ({ ...pre, name: v }))}
-              text={byState.name}
+              labelText="Họ tên"
+              setText={(v) => setByState((pre) => ({ ...pre, hoTen: v }))}
+              // text={byState.hoTen}
             />
             <TextSearchInput
-              labelText="Số điện thoại"
-              setText={(v) => setByState((pre) => ({ ...pre, phoneNumber: v }))}
-              text={byState.phoneNumber}
+              labelText="Căn cước công dân"
+              setText={(v) =>
+                setByState((pre) => ({ ...pre, canCuocCongDan: v }))
+              }
+              // text={byState.canCuocCongDan}
             />
-            <div className="flex flex-col space-y-1">
+            {/* <div className="flex flex-col space-y-1">
               <h1 className="text-gray-700 font-medium">Vai trò</h1>
               <select
                 onChange={(e) =>
@@ -189,8 +198,14 @@ const UserManager = (props: Props) => {
                   </option>
                 ))}
               </select>
-            </div>
-          </div> */}
+            </div> */}
+            <button
+              onClick={() => navigate("/manager/users/add")}
+              className="w-fit h-fit flex my-auto justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+            >
+              Thêm mới
+            </button>
+          </div>
         </div>
         {loading && <Loading />}
         {!loading && userData && (

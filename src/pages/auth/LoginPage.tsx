@@ -14,7 +14,7 @@ import {
   userVar,
 } from "../../apollo/reactiveVar/loginStatusVar";
 import { FormInput, FormInputProps } from "../../components/form/FormInput";
-import LoadingButton from "../../components/LoadingButton";
+import LoadingButton from "../../components/form/LoadingButton";
 import { useLoginLazyQuery } from "../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../utils/getApolloErrorMessage";
 
