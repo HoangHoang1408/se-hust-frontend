@@ -8,6 +8,7 @@ import NormalUserLayout from "./layouts/UserLayout";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import NormalUserHomePage from "./pages/nguoiDan/NormalUserHomePage";
+import UserDetailsForUsers from "./pages/nguoiDan/UserDetailsForUsers";
 import QuanLiHoKhau from "./pages/quanLi/hoKhau/QuanLiHoKhau";
 import ThemHoKhau from "./pages/quanLi/hoKhau/ThemHoKhau";
 import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
@@ -23,8 +24,9 @@ function App() {
       <Routes>
         <Route element={<LoginProtect />}>
           <Route path="/" element={<NormalUserLayout />}>
-            <Route index element={<div>Ho khau page</div>} />
-            <Route path="thongtin" element={<NormalUserHomePage />} />
+            <Route index element={<NormalUserHomePage />}/>
+            <Route path=":id" element={<UserDetails />} />
+            <Route path="thongtin" element={<UserDetailsForUsers />} />
           </Route>
           <Route path="/manager" element={<ManagerLayout />}>
             <Route index element={<ManagerHomePage />} />
