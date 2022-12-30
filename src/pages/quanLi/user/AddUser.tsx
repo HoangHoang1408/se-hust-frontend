@@ -10,7 +10,7 @@ import LoadingButton from "../../../components/form/LoadingButton";
 import { SERVER_URL } from "../../../config";
 import {
   StoredFileInputType,
-  useAddUserMutation
+  useAddUserMutation,
 } from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 
@@ -110,15 +110,15 @@ const AddUser: FC<Props> = () => {
         },
       });
     } catch (err) {
-      if (sendImage)
-        await axios.delete(SERVER_URL + "/file", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data: {
-            storagePath: sendImage.filePath,
-          },
-        });
+      // if (sendImage)
+      //   await axios.post(SERVER_URL + "/delete/file", {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     data: {
+      //       storagePath: sendImage.filePath,
+      //     },
+      //   });
     } finally {
       setLoadingMain(false);
     }

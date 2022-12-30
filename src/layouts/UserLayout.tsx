@@ -1,37 +1,21 @@
-import { useReactiveVar } from "@apollo/client";
-import { Fragment, SVGProps, useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { userVar } from "../apollo/reactiveVar/loginStatusVar";
-import { VaitroNguoiDung } from "../graphql/generated/schema";
-
-import { MenuAlt1Icon, UserGroupIcon } from "@heroicons/react/outline";
-import { BookOpenIcon, ChartSquareBarIcon } from "@heroicons/react/solid";
+import { MenuAlt1Icon } from "@heroicons/react/outline";
+import { BookOpenIcon, UserCircleIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
+import { Fragment, SVGProps, useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
 
 const navigation = [
-  // {
-  //   routes: ["/admin", "/admin/rentings", RegExp("/admin/rentings/*")],
-  //   name: "Quản lí đơn thuê",
-  //   icon: TableIcon,
-  //   current: true,
-  // },
   {
-    routes: ["/manager"],
-    name: "Thống kê",
-    icon: ChartSquareBarIcon,
-    current: false,
-  },
-  {
-    routes: ["/manager/users", RegExp("/manager/users/*")],
-    name: "Quản lí người dùng",
-    icon: UserGroupIcon,
-    current: false,
-  },
-  {
-    routes: ["/manager/hokhau", RegExp("/manager/hokhau/*")],
-    name: "Quản lí hộ khẩu",
+    routes: ["/", "/hokhau", RegExp("/hokhau/*")],
+    name: "Hộ khẩu",
     icon: BookOpenIcon,
+    current: true,
+  },
+  {
+    routes: ["/thongtin"],
+    name: "Thông tin cá nhân",
+    icon: UserCircleIcon,
     current: false,
   },
 ];
@@ -43,21 +27,10 @@ export type NavState = {
   current: boolean;
 };
 type Props = {};
-const ManagerLayout = (props: Props) => {
-  const navigate = useNavigate();
-  const location = useLocation();
+const NormalUserLayout = (props: Props) => {
   const [navState, setNavState] = useState<NavState[]>(navigation);
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = useReactiveVar(userVar);
-  useEffect(() => {
-    if (
-      user &&
-      ![VaitroNguoiDung.ToTruong, VaitroNguoiDung.ToPho].includes(
-        user.vaiTroNguoiDung
-      )
-    )
-      navigate("/");
-  }, [user]);
   useEffect(() => {
     const index = navState.findIndex((s) =>
       s.routes
@@ -97,4 +70,4 @@ const ManagerLayout = (props: Props) => {
   );
 };
 
-export default ManagerLayout;
+export default NormalUserLayout;
