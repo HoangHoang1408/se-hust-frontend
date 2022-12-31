@@ -158,6 +158,7 @@ const UserManager = (props: Props) => {
   const data = useMemo(() => users || [], [users]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
+  console.log(userData);
   return (
     <Fragment>
       <main className="flex-1 mb-8">
