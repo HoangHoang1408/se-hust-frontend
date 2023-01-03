@@ -2,11 +2,15 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useGetUser } from "./hooks/useGetUser";
+import KeToanLayout from "./layouts/KeToanLayout";
 import LoginProtect from "./layouts/LoginProtect";
 import ManagerLayout from "./layouts/ManagerLayout";
+import NormalUserLayout from "./layouts/UserLayout";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import NormalUserHomePage from "./pages/nguoiDan/NormalUserHomePage";
+import QuanLiHoKhau from "./pages/quanLi/hoKhau/QuanLiHoKhau";
+import ThemHoKhau from "./pages/quanLi/hoKhau/ThemHoKhau";
 import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
 import AddUser from "./pages/quanLi/user/AddUser";
 import EditUser from "./pages/quanLi/user/EditUser";
@@ -19,7 +23,10 @@ function App() {
     <div className="">
       <Routes>
         <Route element={<LoginProtect />}>
-          <Route path="/" element={<NormalUserHomePage />} />
+          <Route path="/" element={<NormalUserLayout />}>
+            <Route index element={<div>Ho khau page</div>} />
+            <Route path="thongtin" element={<NormalUserHomePage />} />
+          </Route>
           <Route path="/manager" element={<ManagerLayout />}>
             <Route index element={<ManagerHomePage />} />
             <Route path="users">
@@ -28,6 +35,13 @@ function App() {
               <Route path=":id" element={<UserDetails />} />
               <Route path="edit/:id" element={<EditUser />} />
             </Route>
+            <Route path="hokhau">
+              <Route index element={<QuanLiHoKhau />} />
+              <Route path="add" element={<ThemHoKhau />} />
+            </Route>
+          </Route>
+          <Route path="/account" element={<KeToanLayout />}>
+            <Route index element={<div>Account page</div>} />
           </Route>
         </Route>
         <Route path="/auth">

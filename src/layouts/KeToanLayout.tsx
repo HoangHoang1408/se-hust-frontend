@@ -4,34 +4,16 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { userVar } from "../apollo/reactiveVar/loginStatusVar";
 import { VaitroNguoiDung } from "../graphql/generated/schema";
 
-import { MenuAlt1Icon, UserGroupIcon } from "@heroicons/react/outline";
-import { BookOpenIcon, ChartSquareBarIcon } from "@heroicons/react/solid";
+import { MenuAlt1Icon } from "@heroicons/react/outline";
+import { ChartPieIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
 
 const navigation = [
-  // {
-  //   routes: ["/admin", "/admin/rentings", RegExp("/admin/rentings/*")],
-  //   name: "Quản lí đơn thuê",
-  //   icon: TableIcon,
-  //   current: true,
-  // },
   {
-    routes: ["/manager"],
+    routes: ["/account"],
     name: "Thống kê",
-    icon: ChartSquareBarIcon,
-    current: false,
-  },
-  {
-    routes: ["/manager/users", RegExp("/manager/users/*")],
-    name: "Quản lí người dùng",
-    icon: UserGroupIcon,
-    current: false,
-  },
-  {
-    routes: ["/manager/hokhau", RegExp("/manager/hokhau/*")],
-    name: "Quản lí hộ khẩu",
-    icon: BookOpenIcon,
+    icon: ChartPieIcon,
     current: false,
   },
 ];
@@ -43,21 +25,17 @@ export type NavState = {
   current: boolean;
 };
 type Props = {};
-const ManagerLayout = (props: Props) => {
+const KeToanLayout = (props: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [navState, setNavState] = useState<NavState[]>(navigation);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = useReactiveVar(userVar);
+  
   useEffect(() => {
-    if (
-      user &&
-      ![VaitroNguoiDung.ToTruong, VaitroNguoiDung.ToPho].includes(
-        user.vaiTroNguoiDung
-      )
-    )
-      navigate("/");
+    if (user && user.vaiTroNguoiDung !== VaitroNguoiDung.KeToan) navigate("/");
   }, [user]);
+
   useEffect(() => {
     const index = navState.findIndex((s) =>
       s.routes
@@ -75,6 +53,7 @@ const ManagerLayout = (props: Props) => {
       return newState;
     });
   }, [location]);
+
   return (
     <Fragment>
       <div className="min-h-full">
@@ -97,4 +76,4 @@ const ManagerLayout = (props: Props) => {
   );
 };
 
-export default ManagerLayout;
+export default KeToanLayout;

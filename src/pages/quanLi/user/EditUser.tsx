@@ -94,7 +94,7 @@ const EditUser: FC<Props> = () => {
         toast.error(xemThongTinNguoiDungChoQuanLi.error.message);
         return;
       }
-      const { user } = xemThongTinNguoiDungChoQuanLi;
+      const user = data.xemThongTinNguoiDungChoQuanLi.user;
       if (!user) {
         toast.error("Không tìm thấy người dùng");
         return;
@@ -126,13 +126,14 @@ const EditUser: FC<Props> = () => {
   });
   const [editUser] = useEditUserMutation();
   const submitHandler = async () => {
+    const oldFilePath = user?.avatar?.filePath;
     let sendImage: StoredFileInputType | undefined;
     try {
-      const formData = new FormData();
+      setLoadingMain(true);
       if (image) {
+        const formData = new FormData();
         formData.append("file", image);
         formData.append("storagePath", "se/users/avatars");
-        setLoadingMain(true);
         const res = await axios.post(SERVER_URL + "/upload/file", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -154,8 +155,6 @@ const EditUser: FC<Props> = () => {
             toast.error(editUser.error.message);
             throw new Error();
           }
-          reset();
-          setImage(undefined);
           toast.success("Cập nhật thành công");
         },
         onError(err) {
@@ -164,19 +163,28 @@ const EditUser: FC<Props> = () => {
           else toast.error("Lỗi xảy ra, thử lại sau");
           throw err;
         },
-        refetchQueries: ["UserDetails"],
       });
     } catch (err) {
-      if (sendImage)
-        await axios.delete(SERVER_URL + "/file", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data: {
-            storagePath: sendImage.filePath,
-          },
-        });
+      // if (sendImage)
+      //   await axios.post(SERVER_URL + "/delete/file", {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     data: {
+      //       storagePath: sendImage.filePath,
+      //     },
+      //   });
     } finally {
+      // if (oldFilePath) {
+      //   await axios.post(SERVER_URL + "/delete/file", {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     data: {
+      //       storagePath: oldFilePath,
+      //     },
+      //   });
+      // }
       setLoadingMain(false);
     }
   };

@@ -15,8 +15,7 @@ const DesktopSidebar = ({ navState, setNavState }: Props) => {
   return (
     <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:pt-5 lg:pb-4 lg:bg-gray-100">
       <div className="flex justify-center flex-shrink-0 px-6">
-        <Link to={"/admin"}>
-          {/* <img className="h-16 w-auto" src={logo2} /> */}
+        <Link to={"/manager"}>
           <FontAwesomeIcon
             className="w-12 h-12 text-indigo-700 mx-auto"
             icon={faHome}
@@ -31,8 +30,12 @@ const DesktopSidebar = ({ navState, setNavState }: Props) => {
           <div className="space-y-1">
             {navState.map((item, i) => (
               <button
-                //@ts-ignore
-                onClick={() => navigate(navState[i].routes[0])}
+                onClick={() => {
+                  const temp = navState[i].routes[0];
+                  if (temp instanceof RegExp) {
+                    navigate(temp.source);
+                  } else navigate(temp);
+                }}
                 key={item.name}
                 className={classNames(
                   item.current
@@ -45,8 +48,8 @@ const DesktopSidebar = ({ navState, setNavState }: Props) => {
                 <item.icon
                   className={classNames(
                     item.current
-                      ? "text-indigo-500"
-                      : "text-indigo-400 group-hover:text-indigo-500",
+                      ? "text-indigo-600"
+                      : "text-indigo-400 group-hover:text-indigo-600",
                     "mr-3 flex-shrink-0 h-6 w-6"
                   )}
                   aria-hidden="true"

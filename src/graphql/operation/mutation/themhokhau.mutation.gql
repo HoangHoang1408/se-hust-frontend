@@ -1,0 +1,9 @@
+mutation ThemHoKhau($input: ThemHoKhauInput!) {
+  themHoKhau(input: $input) {
+    ok
+    error {
+      message
+      mainReason
+    }
+  }
+}
