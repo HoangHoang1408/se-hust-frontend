@@ -64,7 +64,6 @@ const UserDetailsForUsers: FC<Props> = () => {
                 ["Nghề nghiệp", user?.ngheNghiep],
                 ["Nơi thường trú trước đó", user?.noiThuongTruTruocDo],
                 ["Ngày đăng kí thường trú", user?.ngayDangKiThuongTru],
-                ["Nghề nghiệp", user?.ngheNghiep],
                 ["Nơi làm việc", user?.noiLamViec],
                 ["Dân tộc", user?.danToc],
                 ["Ghi chú", user?.ghiChu],

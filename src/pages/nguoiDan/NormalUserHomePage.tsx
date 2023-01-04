@@ -32,6 +32,7 @@ const NormalUserHomePage = (props: Props) => {
       toast.error("Lôi xảy ra, thử lại sau");
     },
   });
+  
 
   const columns = useMemo(() => {
     return [
@@ -126,7 +127,7 @@ const NormalUserHomePage = (props: Props) => {
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1 flex flex-row">
                   {chuHo?.ten}
                 </dd>
-                <div className="space-x-2">
+                <div className="space-x-2 ml-28">
                   <button
                       onClick={() => {
                        navigate(`/${chuHo?.id}`);
@@ -188,6 +189,14 @@ const NormalUserHomePage = (props: Props) => {
                     </tbody>
                   </table>
                 </div>
+              </div>
+              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                   Lịch sử thay đổi hộ khẩu:
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {hoKhau?.createdAt}
+                </dd>
               </div>
               </dl>
           </div>
