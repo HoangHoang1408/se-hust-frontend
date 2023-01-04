@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useGetUser } from "./hooks/useGetUser";
+import KeToanLayout from "./layouts/KeToanLayout";
 import LoginProtect from "./layouts/LoginProtect";
 import ManagerLayout from "./layouts/ManagerLayout";
 import NormalUserLayout from "./layouts/UserLayout";
@@ -40,6 +41,9 @@ function App() {
               <Route index element={<QuanLiHoKhau />} />
               <Route path="add" element={<ThemHoKhau />} />
             </Route>
+          </Route>
+          <Route path="/account" element={<KeToanLayout />}>
+            <Route index element={<div>Account page</div>} />
           </Route>
         </Route>
         <Route path="/auth">
