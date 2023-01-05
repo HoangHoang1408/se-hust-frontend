@@ -3,7 +3,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 
 export type FormInputProps = {
   id: string;
-  labelText: string;
+  labelText?: string;
   type?: HTMLInputTypeAttribute;
   errorMessage?: string;
   registerReturn?: UseFormRegisterReturn;
@@ -20,12 +20,14 @@ export const FormInput: FC<FormInputProps> = ({
 }) => {
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-gray-700 text-start"
-      >
-        {labelText}
-      </label>
+      {labelText && (
+        <label
+          htmlFor={id}
+          className="block text-sm font-medium text-gray-700 text-start"
+        >
+          {labelText}
+        </label>
+      )}
       <div className="mt-1">
         <input
           {...registerReturn}
