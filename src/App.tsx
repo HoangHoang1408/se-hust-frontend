@@ -10,7 +10,9 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import NormalUserHomePage from "./pages/nguoiDan/NormalUserHomePage";
 import UserDetailsForUsers from "./pages/nguoiDan/UserDetailsForUsers";
+import CapNhatHoKhau from "./pages/quanLi/hoKhau/CapNhatHoKhau";
 import QuanLiHoKhau from "./pages/quanLi/hoKhau/QuanLiHoKhau";
+import TachHoKhau from "./pages/quanLi/hoKhau/TachHoKhau";
 import ThemHoKhau from "./pages/quanLi/hoKhau/ThemHoKhau";
 import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
 import AddUser from "./pages/quanLi/user/AddUser";
@@ -40,6 +42,8 @@ function App() {
             <Route path="hokhau">
               <Route index element={<QuanLiHoKhau />} />
               <Route path="add" element={<ThemHoKhau />} />
+              <Route path="split" element={<TachHoKhau />} />
+              <Route path="update" element={<CapNhatHoKhau />} />
             </Route>
           </Route>
           <Route path="/account" element={<KeToanLayout />}>

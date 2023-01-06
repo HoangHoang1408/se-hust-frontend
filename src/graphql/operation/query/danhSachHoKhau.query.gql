@@ -1,0 +1,23 @@
+query DanhSachHoKhau($input: XemDanhSachHoKhauInput!) {
+  xemDanhSachHoKhau(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+    paginationOutput {
+      totalPages
+      totalResults
+    }
+    hoKhau {
+      id
+      createdAt
+      updatedAt
+      diaChiThuongTru
+      soHoKhau
+      thanhVien {
+        ...UserFragment
+      }
+    }
+  }
+}
