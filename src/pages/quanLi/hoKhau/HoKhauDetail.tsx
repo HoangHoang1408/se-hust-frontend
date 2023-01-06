@@ -1,55 +1,66 @@
 import { useReactiveVar } from "@apollo/client";
 import { Fragment, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
-import { userVar } from "../../apollo/reactiveVar/loginStatusVar";
-import Loading from "../../components/Loading";
-import { useHoKhauQuery, useLichSuHoKhauChoNguoiDungQuery } from "../../graphql/generated/schema";
-import { getApolloErrorMessage } from "../../utils/getApolloErrorMessage";
+import { userVar } from "../../../apollo/reactiveVar/loginStatusVar";
+import Loading from "../../../components/Loading";
+import { useHoKhauDetailQuery, useLichSuHoKhauChoQuanLiQuery } from "../../../graphql/generated/schema";
+import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 
 type Props = {};
 
-const NormalUserHomePage = (props: Props) => {
-  const navigate = useNavigate();
-  const user = useReactiveVar(userVar);
+const HoKhauDetail = (props: Props) => {
+    const user = useReactiveVar(userVar);
+    const navigate = useNavigate();
+    const params = useParams();
+    const { data: hoKhauData, loading } = useHoKhauDetailQuery({
+        variables: {
+        input: {
+            hoKhauId: params.id!,
+            },
+        },
+        onCompleted(data) {
+            const { xemHoKhauChiTietChoQuanLi } = data;
+            if (xemHoKhauChiTietChoQuanLi.error) {
+                toast.error(xemHoKhauChiTietChoQuanLi.error.message);
+                return;
+            }
+        },
+        onError(err) {
+        const msg = getApolloErrorMessage(err);
+        if (msg) {
+            toast.error(msg);
+            return;
+        }
+        toast.error("Lôi xảy ra, thử lại sau");
+    },
+    });
 
-  const { data: hoKhauData, loading } = useHoKhauQuery(
-    {
-      onCompleted(data) {
-      const {xemHoKhauChiTietChoNguoiDung} = data;
-      if (xemHoKhauChiTietChoNguoiDung.error) {
-        toast.error(xemHoKhauChiTietChoNguoiDung.error.message);
-        return;
-      }
-    },
-      onError(err) {
-      const msg = getApolloErrorMessage(err);
-      if (msg) {
-        toast.error(msg);
-        return;
-      }
-      toast.error("Lôi xảy ra, thử lại sau");
-    },
-  });
+    const {data: lichSuHoKhauData, loading: lichSuHoKhauLoading} = useLichSuHoKhauChoQuanLiQuery({
+        variables: {
+            input: {
+                hoKhauId: params.id!,
+            },
+        },
+        onCompleted(data) {
+            const { xemLichSuThayDoiNhanKhauChoQuanLy } = data;
+            if (xemLichSuThayDoiNhanKhauChoQuanLy.error) {
+                toast.error(xemLichSuThayDoiNhanKhauChoQuanLy.error.message);
+                return;
+            }
+        },
+        onError(err) {
+            const msg = getApolloErrorMessage(err);
+            if (msg) {
+                toast.error(msg);
+                return;
+            }
+            toast.error("Lôi xảy ra, thử lại sau");
+        },
+    });
 
-  const {data: lichSuHoKhauData, loading: lichSuHoKhauLoading} = useLichSuHoKhauChoNguoiDungQuery({
-    onCompleted(data) {
-      const {xemLichSuThayDoiNhanKhauChoNguoiDung} = data;
-      if (xemLichSuThayDoiNhanKhauChoNguoiDung.error) {
-        toast.error(xemLichSuThayDoiNhanKhauChoNguoiDung.error.message);
-        return;
-      }
-    },
-    onError(err) {
-      const msg = getApolloErrorMessage(err);
-      if (msg) {
-        toast.error(msg);
-        return;
-      }
-      toast.error("Lôi xảy ra, thử lại sau");
-    }
-  });
+
   
 
   const columns = useMemo(() => {
@@ -96,13 +107,13 @@ const NormalUserHomePage = (props: Props) => {
       },
     ];
   }, []);
-  const hoKhau = hoKhauData?.xemHoKhauChiTietChoNguoiDung.hoKhau;
+  const hoKhau = hoKhauData?.xemHoKhauChiTietChoQuanLi.hoKhau;
   const chuHo = hoKhau?.thanhVien?.find((tv) => tv.vaiTroThanhVien === "ChuHo");
   const thanhVien = hoKhau?.thanhVien?.filter((tv) => tv.vaiTroThanhVien !== "ChuHo");
   const data = useMemo(() => thanhVien || [], [thanhVien]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
-  const lichSuHoKhau = lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoNguoiDung.lichSuHoKhau;
+  const lichSuHoKhau = lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoQuanLy.lichSuHoKhau;
   return (
   <Fragment>
     {loading && lichSuHoKhauLoading && <Loading />}
@@ -110,7 +121,7 @@ const NormalUserHomePage = (props: Props) => {
          <div className="overflow-hidden bg-white py-4 pr-10">
          <div className="pl-4 py-5 sm:px-6 mt-2 ">
            <h3 className="text-3xl font-bold leading-6 text-indigo-700 mb-6 pb-6 border-b border-gray-300">
-             Thông tin hộ khẩu của bạn
+             Thông tin chi tiết hộ khẩu
            </h3>
          </div>
           <div>
@@ -215,7 +226,7 @@ const NormalUserHomePage = (props: Props) => {
                 </dt>
                 <dl className="ml-4">
                   {lichSuHoKhau?.map((item) => (
-                    <div>
+                    <div className="mb-10 border-2">
                       <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">
                         Hành động
@@ -268,4 +279,4 @@ const NormalUserHomePage = (props: Props) => {
   );
 };
 
-export default NormalUserHomePage;
+export default HoKhauDetail;

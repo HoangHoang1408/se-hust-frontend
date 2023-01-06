@@ -1,0 +1,18 @@
+query HoKhauDetail($input: XemHoKhauChiTietChoQuanLiInput!) {
+  xemHoKhauChiTietChoQuanLi(input: $input) {
+    ok
+    hoKhau {
+      id
+      soHoKhau
+      createdAt
+      diaChiThuongTru
+      thanhVien {
+        ...UserFragment
+      }
+    }
+    error {
+      message
+      mainReason
+    }
+  }
+}
