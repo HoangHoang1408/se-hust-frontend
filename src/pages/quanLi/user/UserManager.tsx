@@ -3,6 +3,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
+import { VaitroNguoiDungDisplay } from "../../../common/constants";
 import TextSearchInput from "../../../components/form/TextSearchInput";
 import Loading from "../../../components/Loading";
 import PaginationNav from "../../../components/PaginationNav";
@@ -90,7 +91,7 @@ const UserManager = (props: Props) => {
       {
         Header: "Vai trò",
         // @ts-ignore
-        accessor: (row) => row["vaiTroNguoiDung"],
+        accessor: (row) => VaitroNguoiDungDisplay[row["vaiTroNguoiDung"]],
       },
       {
         Header: "Đã đăng kí",
