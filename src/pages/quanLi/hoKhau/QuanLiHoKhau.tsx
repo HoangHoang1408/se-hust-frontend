@@ -157,6 +157,7 @@ const QuanLiHoKhau = (props: Props) => {
                   ].map(({ route, title }) => {
                     return (
                       <h1
+                        key={title}
                         onClick={() => {
                           setOpenHanhDong(false);
                           navigate(`/manager/hokhau/${route}`);

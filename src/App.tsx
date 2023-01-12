@@ -1,3 +1,4 @@
+import { divide } from "lodash";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,6 +9,7 @@ import ManagerLayout from "./layouts/ManagerLayout";
 import NormalUserLayout from "./layouts/UserLayout";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import ChangePassword from "./pages/nguoiDan/ChangePassword";
 import NormalUserHomePage from "./pages/nguoiDan/NormalUserHomePage";
 import UserDetailsForUsers from "./pages/nguoiDan/UserDetailsForUsers";
 import CapNhatHoKhau from "./pages/quanLi/hoKhau/CapNhatHoKhau";
@@ -31,6 +33,7 @@ function App() {
             <Route index element={<NormalUserHomePage />}/>
             <Route path=":id" element={<UserDetails />} />
             <Route path="thongtin" element={<UserDetailsForUsers />} />
+            <Route path="changepassword" element={<ChangePassword />}></Route>
           </Route>
           <Route path="/manager" element={<ManagerLayout />}>
             <Route index element={<ManagerHomePage />} />
