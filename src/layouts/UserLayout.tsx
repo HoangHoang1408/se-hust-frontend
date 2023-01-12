@@ -18,6 +18,12 @@ const navigation = [
     icon: UserCircleIcon,
     current: false,
   },
+  {
+    routes: ["/changepassword"],
+    name: "Thay đổi mật khẩu",
+    icon: UserCircleIcon,
+    current: false,
+  },
 ];
 
 export type NavState = {
