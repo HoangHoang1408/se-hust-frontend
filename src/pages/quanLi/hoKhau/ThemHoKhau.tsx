@@ -65,13 +65,7 @@ const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
         <label htmlFor="" className="text-indigo-700 font-semibold">
           Tìm theo căn cước công dân
         </label>
-        <div
-          onBlur={() => {
-            setTimeout(() => {
-              setCanShowResults(false);
-            }, 100);
-          }}
-        >
+        <div >
           <input
             className="appearance-none block w-full h-8 px-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             type="text"
@@ -86,7 +80,7 @@ const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
             {canShowResults && results.length === 0 && !loading && (
               <h1 className="text-center py-4 bg-white">
                 Nhập căn cước công dân đúng để tìm
-              </h1>
+              </h1> 
             )}
             {canShowResults &&
               results.length > 0 &&
@@ -99,7 +93,7 @@ const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
                       setCanShowResults(false);
                       setCanCuocCongDan("");
                     }}
-                    className="flex flex-col p-2 bg-white border border-indigo-500 rounded-md m-1 cursor-pointer hover:bg-indigo-500 hover:text-white"
+                    className="p-2 bg-white border border-indigo-500 rounded-md m-1 cursor-pointer hover:bg-indigo-500 hover:text-white"
                   >
                     <h1>Họ tên: {ten}</h1>
                     <h1>Căn cước công dân: {canCuocCongDan}</h1>
@@ -185,6 +179,7 @@ const ThemHoKhau: FC = () => {
       },
     });
   };
+  console.log(thanhVien)
   return (
     <form
       onSubmit={handleSubmit(submitHandler)}
