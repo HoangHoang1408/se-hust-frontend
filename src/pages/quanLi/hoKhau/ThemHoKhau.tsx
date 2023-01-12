@@ -1,7 +1,7 @@
 import { XIcon } from "@heroicons/react/outline";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { cloneDeep } from "lodash";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -27,6 +27,20 @@ const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
   const [getUsers, { loading }] = useDanhSachNguoiDungLazyQuery();
   const [results, setResults] = useState<UserFragmentFragment[]>([]);
   const [canShowResults, setCanShowResults] = useState<boolean>(false);
+
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // @ts-ignore
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setCanShowResults(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, [ref]);
   useEffect(() => {
     if (canCuocCongDan.length === 0) {
       setResults([]);
@@ -65,7 +79,7 @@ const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
         <label htmlFor="" className="text-indigo-700 font-semibold">
           Tìm theo căn cước công dân
         </label>
-        <div >
+        <div ref={ref}>
           <input
             className="appearance-none block w-full h-8 px-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             type="text"
