@@ -4,71 +4,76 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
 import { userVar } from "../../../apollo/reactiveVar/loginStatusVar";
+import {
+  HanhDongHoKhauDisplay,
+  VaiTroThanhVienDisplay,
+} from "../../../common/constants";
 import Loading from "../../../components/Loading";
-import { useHoKhauDetailQuery, useLichSuHoKhauChoQuanLiQuery } from "../../../graphql/generated/schema";
+import {
+  useHoKhauDetailQuery,
+  useLichSuHoKhauChoQuanLiQuery,
+} from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 
 type Props = {};
 
 const HoKhauDetail = (props: Props) => {
-    const user = useReactiveVar(userVar);
-    const navigate = useNavigate();
-    const params = useParams();
-    const { data: hoKhauData, loading } = useHoKhauDetailQuery({
-        variables: {
+  const user = useReactiveVar(userVar);
+  const navigate = useNavigate();
+  const params = useParams();
+  const { data: hoKhauData, loading } = useHoKhauDetailQuery({
+    variables: {
+      input: {
+        hoKhauId: params.id!,
+      },
+    },
+    onCompleted(data) {
+      const { xemHoKhauChiTietChoQuanLi } = data;
+      if (xemHoKhauChiTietChoQuanLi.error) {
+        toast.error(xemHoKhauChiTietChoQuanLi.error.message);
+        return;
+      }
+    },
+    onError(err) {
+      const msg = getApolloErrorMessage(err);
+      if (msg) {
+        toast.error(msg);
+        return;
+      }
+      toast.error("Lôi xảy ra, thử lại sau");
+    },
+  });
+
+  const { data: lichSuHoKhauData, loading: lichSuHoKhauLoading } =
+    useLichSuHoKhauChoQuanLiQuery({
+      variables: {
         input: {
-            hoKhauId: params.id!,
-            },
+          hoKhauId: params.id!,
         },
-        onCompleted(data) {
-            const { xemHoKhauChiTietChoQuanLi } = data;
-            if (xemHoKhauChiTietChoQuanLi.error) {
-                toast.error(xemHoKhauChiTietChoQuanLi.error.message);
-                return;
-            }
-        },
-        onError(err) {
+      },
+      onCompleted(data) {
+        const { xemLichSuThayDoiNhanKhauChoQuanLy } = data;
+        if (xemLichSuThayDoiNhanKhauChoQuanLy.error) {
+          toast.error(xemLichSuThayDoiNhanKhauChoQuanLy.error.message);
+          return;
+        }
+      },
+      onError(err) {
         const msg = getApolloErrorMessage(err);
         if (msg) {
-            toast.error(msg);
-            return;
+          toast.error(msg);
+          return;
         }
         toast.error("Lôi xảy ra, thử lại sau");
-    },
+      },
     });
-
-    const {data: lichSuHoKhauData, loading: lichSuHoKhauLoading} = useLichSuHoKhauChoQuanLiQuery({
-        variables: {
-            input: {
-                hoKhauId: params.id!,
-            },
-        },
-        onCompleted(data) {
-            const { xemLichSuThayDoiNhanKhauChoQuanLy } = data;
-            if (xemLichSuThayDoiNhanKhauChoQuanLy.error) {
-                toast.error(xemLichSuThayDoiNhanKhauChoQuanLy.error.message);
-                return;
-            }
-        },
-        onError(err) {
-            const msg = getApolloErrorMessage(err);
-            if (msg) {
-                toast.error(msg);
-                return;
-            }
-            toast.error("Lôi xảy ra, thử lại sau");
-        },
-    });
-
-
-  
 
   const columns = useMemo(() => {
     return [
       {
         Header: "Vai trò",
         // @ts-ignore
-        accessor: (row) => row["vaiTroThanhVien"],
+        accessor: (row) => VaiTroThanhVienDisplay[row["vaiTroThanhVien"]],
       },
       {
         Header: "Họ tên",
@@ -109,21 +114,24 @@ const HoKhauDetail = (props: Props) => {
   }, []);
   const hoKhau = hoKhauData?.xemHoKhauChiTietChoQuanLi.hoKhau;
   const chuHo = hoKhau?.thanhVien?.find((tv) => tv.vaiTroThanhVien === "ChuHo");
-  const thanhVien = hoKhau?.thanhVien?.filter((tv) => tv.vaiTroThanhVien !== "ChuHo");
+  const thanhVien = hoKhau?.thanhVien?.filter(
+    (tv) => tv.vaiTroThanhVien !== "ChuHo"
+  );
   const data = useMemo(() => thanhVien || [], [thanhVien]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
-  const lichSuHoKhau = lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoQuanLy.lichSuHoKhau;
+  const lichSuHoKhau =
+    lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoQuanLy.lichSuHoKhau;
   return (
-  <Fragment>
-    {loading && lichSuHoKhauLoading && <Loading />}
+    <Fragment>
+      {loading && lichSuHoKhauLoading && <Loading />}
       {!loading && !lichSuHoKhauLoading && user && (
-         <div className="overflow-hidden bg-white py-4 pr-10">
-         <div className="pl-4 py-5 sm:px-6 mt-2 ">
-           <h3 className="text-3xl font-bold leading-6 text-indigo-700 mb-6 pb-6 border-b border-gray-300">
-             Thông tin chi tiết hộ khẩu
-           </h3>
-         </div>
+        <div className="overflow-hidden bg-white py-4 pr-10">
+          <div className="pl-4 py-5 sm:px-6 mt-2 ">
+            <h3 className="text-3xl font-bold leading-6 text-indigo-700 mb-6 pb-6 border-b border-gray-300">
+              Thông tin chi tiết hộ khẩu
+            </h3>
+          </div>
           <div>
             <dl>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -151,18 +159,17 @@ const HoKhauDetail = (props: Props) => {
                 </dd>
               </div>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Chủ hộ
-                </dt>
+                <dt className="text-sm font-medium text-gray-500">Chủ hộ</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1 flex flex-row">
                   {chuHo?.ten}
                 </dd>
                 <div className="space-x-2 ml-28">
                   <button
-                      onClick={() => {
-                       navigate(`/${chuHo?.id}`);
-                      }}
-                    className="m-0 text-indigo-500 cursor-pointer hover:text-indigo-700 hover:bg-indigo-300 text-left rounded transition w-fit">
+                    onClick={() => {
+                      navigate(`/${chuHo?.id}`);
+                    }}
+                    className="m-0 text-indigo-500 cursor-pointer hover:text-indigo-700 hover:bg-indigo-300 text-left rounded transition w-fit"
+                  >
                     Chi tiết
                   </button>
                 </div>
@@ -221,61 +228,66 @@ const HoKhauDetail = (props: Props) => {
                 </div>
               </div>
               <div className="bg-white px-4 py-5 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                   Lịch sử thay đổi hộ khẩu:
+                <dt className="text-sm font-medium text-gray-500 mb-3">
+                  Lịch sử thay đổi hộ khẩu:
                 </dt>
                 <dl className="ml-4">
                   {lichSuHoKhau?.map((item) => (
-                    <div className="mb-10 border-2">
+                    <div className="mb-10 border-2 rounded-md shadow">
                       <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">
-                        Hành động
+                          Hành động
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {item?.hanhDong}
+                          {HanhDongHoKhauDisplay[item?.hanhDong]}
                         </dd>
                       </div>
                       <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">
-                        Thời gian
+                          Thời gian
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {item?.thoiGian}
+                          {item &&
+                            new Date(item.thoiGian).toLocaleDateString("vi", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            })}
                         </dd>
                       </div>
                       <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">
-                        ghi chú
+                          Người yêu cầu
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {item?.ghiChu}
+                          {item?.nguoiYeuCau.ten}
                         </dd>
                       </div>
                       <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">
-                        Người yêu cầu
+                          Người phê duyệt
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {item?.nguoiYeuCau.ten}
+                          {item?.nguoiPheDuyet.ten}
                         </dd>
                       </div>
                       <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">
-                        Người phê duyệt
+                          Ghi chú
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {item?.nguoiPheDuyet.ten}
+                          {item?.ghiChu}
                         </dd>
                       </div>
-                    </div>     
+                    </div>
                   ))}
                 </dl>
               </div>
-              </dl>
+            </dl>
           </div>
         </div>
       )}
-  </Fragment>
+    </Fragment>
   );
 };
 

@@ -1,5 +1,5 @@
 import { MenuAlt1Icon } from "@heroicons/react/outline";
-import { BookOpenIcon, UserCircleIcon } from "@heroicons/react/solid";
+import { BookOpenIcon, KeyIcon, UserCircleIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import { Fragment, SVGProps, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
@@ -21,7 +21,7 @@ const navigation = [
   {
     routes: ["/changepassword"],
     name: "Thay đổi mật khẩu",
-    icon: UserCircleIcon,
+    icon: KeyIcon,
     current: false,
   },
 ];

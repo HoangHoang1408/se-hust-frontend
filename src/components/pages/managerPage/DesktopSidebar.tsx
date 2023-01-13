@@ -1,7 +1,9 @@
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ArrowCircleLeftIcon } from "@heroicons/react/solid";
 import { Dispatch, SetStateAction } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../../apollo/reactiveVar/loginStatusVar";
 import { classNames } from "../../../common/utilFunctions";
 import { NavState } from "../../../layouts/ManagerLayout";
 import UserDropdown from "./UserDropdown";
@@ -23,9 +25,8 @@ const DesktopSidebar = ({ navState, setNavState }: Props) => {
         </Link>
       </div>
       {/* Sidebar component, swap this element with another sidebar if you like */}
-      <div className="mt-6 h-0 flex-1 flex flex-col overflow-y-auto px-3">
+      <div className="mt-6 h-0 flex-1 flex flex-col px-3">
         <UserDropdown />
-        {/* Navigation */}
         <nav className="mt-6">
           <div className="space-y-1">
             {navState.map((item, i) => (
@@ -59,6 +60,15 @@ const DesktopSidebar = ({ navState, setNavState }: Props) => {
             ))}
           </div>
         </nav>
+      </div>
+      <div className="justify-self-end px-2 w-fit mx-auto mb-4">
+        <div
+          onClick={() => logout()}
+          className="flex mt-6 group items-center pl-1 pr-3 py-1 text-sm font-medium rounded w-full text-gray-700 hover:text-white hover:bg-indigo-600 shadow-md space-x-2 cursor-pointer group"
+        >
+          <ArrowCircleLeftIcon className="w-8 h-8 text-indigo-700 group-hover:text-white" />
+          <button className="">Log out</button>
+        </div>
       </div>
     </div>
   );
