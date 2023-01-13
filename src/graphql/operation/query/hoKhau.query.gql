@@ -1,0 +1,18 @@
+query hoKhau {
+  xemHoKhauChiTietChoNguoiDung {
+    ok
+    hoKhau {
+      id
+      soHoKhau
+      createdAt
+      diaChiThuongTru
+      thanhVien {
+        ...UserFragment
+      }
+    }
+    error {
+      message
+      mainReason
+    }
+  }
+}

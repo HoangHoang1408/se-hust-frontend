@@ -1,4 +1,3 @@
-import { divide } from "lodash";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,7 +10,10 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ChangePassword from "./pages/nguoiDan/ChangePassword";
 import NormalUserHomePage from "./pages/nguoiDan/NormalUserHomePage";
+import ThanhVien from "./pages/nguoiDan/ThanhVien";
+import UserDetailsForUsers from "./pages/nguoiDan/UserDetailsForUsers";
 import CapNhatHoKhau from "./pages/quanLi/hoKhau/CapNhatHoKhau";
+import HoKhauDetail from "./pages/quanLi/hoKhau/HoKhauDetail";
 import QuanLiHoKhau from "./pages/quanLi/hoKhau/QuanLiHoKhau";
 import TachHoKhau from "./pages/quanLi/hoKhau/TachHoKhau";
 import ThemHoKhau from "./pages/quanLi/hoKhau/ThemHoKhau";
@@ -28,8 +30,9 @@ function App() {
       <Routes>
         <Route element={<LoginProtect />}>
           <Route path="/" element={<NormalUserLayout />}>
-            <Route index element={<div>Ho khau page</div>} />
-            <Route path="thongtin" element={<NormalUserHomePage />} />
+            <Route index element={<NormalUserHomePage />} />
+            <Route path="thanhvien/:id" element={<ThanhVien />} />
+            <Route path="thongtin" element={<UserDetailsForUsers />} />
             <Route path="changepassword" element={<ChangePassword />}></Route>
           </Route>
           <Route path="/manager" element={<ManagerLayout />}>
@@ -44,6 +47,7 @@ function App() {
               <Route index element={<QuanLiHoKhau />} />
               <Route path="add" element={<ThemHoKhau />} />
               <Route path="split" element={<TachHoKhau />} />
+              <Route path=":id" element={<HoKhauDetail />} />
               <Route path="update" element={<CapNhatHoKhau />} />
             </Route>
           </Route>

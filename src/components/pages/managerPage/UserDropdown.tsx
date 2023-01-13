@@ -3,8 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { SelectorIcon, UserCircleIcon } from "@heroicons/react/outline";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout, userVar } from "../../../apollo/reactiveVar/loginStatusVar";
-import { classNames } from "../../../common/utilFunctions";
+import { userVar } from "../../../apollo/reactiveVar/loginStatusVar";
 type Props = {};
 const UserDropdown = (props: Props) => {
   const navigate = useNavigate();
@@ -46,7 +45,7 @@ const UserDropdown = (props: Props) => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="z-10 mx-3 origin-top absolute right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
-          <div className="py-1">
+          {/* <div className="py-1">
             <Menu.Item>
               {({ active }) => (
                 <button
@@ -59,42 +58,7 @@ const UserDropdown = (props: Props) => {
                 </button>
               )}
             </Menu.Item>
-          </div>
-          <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => {
-                    navigate("/changepassword");
-                  }}
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm w-full text-left"
-                  )}
-                >
-                  Đổi mật khẩu
-                </button>
-              )}
-            </Menu.Item>
-          </div>
-          <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => {
-                    logout();
-                    navigate("/");
-                  }}
-                  className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm w-full text-left"
-                  )}
-                >
-                  Logout
-                </button>
-              )}
-            </Menu.Item>
-          </div>
+          </div> */}
         </Menu.Items>
       </Transition>
     </Menu>

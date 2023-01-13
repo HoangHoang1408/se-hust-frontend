@@ -1,31 +1,36 @@
 import { useReactiveVar } from "@apollo/client";
 import { Fragment, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
-import { userVar } from "../../apollo/reactiveVar/loginStatusVar";
+import { userVar } from "../../../apollo/reactiveVar/loginStatusVar";
 import {
   HanhDongHoKhauDisplay,
   VaiTroThanhVienDisplay,
-} from "../../common/constants";
-import Loading from "../../components/Loading";
+} from "../../../common/constants";
+import Loading from "../../../components/Loading";
 import {
-  useHoKhauQuery,
-  useLichSuHoKhauChoNguoiDungQuery,
-} from "../../graphql/generated/schema";
-import { getApolloErrorMessage } from "../../utils/getApolloErrorMessage";
+  useHoKhauDetailQuery,
+  useLichSuHoKhauChoQuanLiQuery,
+} from "../../../graphql/generated/schema";
+import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 
 type Props = {};
 
-const NormalUserHomePage = (props: Props) => {
-  const navigate = useNavigate();
+const HoKhauDetail = (props: Props) => {
   const user = useReactiveVar(userVar);
-
-  const { data: hoKhauData, loading } = useHoKhauQuery({
+  const navigate = useNavigate();
+  const params = useParams();
+  const { data: hoKhauData, loading } = useHoKhauDetailQuery({
+    variables: {
+      input: {
+        hoKhauId: params.id!,
+      },
+    },
     onCompleted(data) {
-      const { xemHoKhauChiTietChoNguoiDung } = data;
-      if (xemHoKhauChiTietChoNguoiDung.error) {
-        toast.error(xemHoKhauChiTietChoNguoiDung.error.message);
+      const { xemHoKhauChiTietChoQuanLi } = data;
+      if (xemHoKhauChiTietChoQuanLi.error) {
+        toast.error(xemHoKhauChiTietChoQuanLi.error.message);
         return;
       }
     },
@@ -40,11 +45,16 @@ const NormalUserHomePage = (props: Props) => {
   });
 
   const { data: lichSuHoKhauData, loading: lichSuHoKhauLoading } =
-    useLichSuHoKhauChoNguoiDungQuery({
+    useLichSuHoKhauChoQuanLiQuery({
+      variables: {
+        input: {
+          hoKhauId: params.id!,
+        },
+      },
       onCompleted(data) {
-        const { xemLichSuThayDoiNhanKhauChoNguoiDung } = data;
-        if (xemLichSuThayDoiNhanKhauChoNguoiDung.error) {
-          toast.error(xemLichSuThayDoiNhanKhauChoNguoiDung.error.message);
+        const { xemLichSuThayDoiNhanKhauChoQuanLy } = data;
+        if (xemLichSuThayDoiNhanKhauChoQuanLy.error) {
+          toast.error(xemLichSuThayDoiNhanKhauChoQuanLy.error.message);
           return;
         }
       },
@@ -90,7 +100,7 @@ const NormalUserHomePage = (props: Props) => {
             <div className="space-x-2">
               <button
                 onClick={() => {
-                  navigate(`/thanhvien/${data["id"]}`);
+                  navigate(`/${data["id"]}`);
                 }}
                 className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
               >
@@ -102,7 +112,7 @@ const NormalUserHomePage = (props: Props) => {
       },
     ];
   }, []);
-  const hoKhau = hoKhauData?.xemHoKhauChiTietChoNguoiDung.hoKhau;
+  const hoKhau = hoKhauData?.xemHoKhauChiTietChoQuanLi.hoKhau;
   const chuHo = hoKhau?.thanhVien?.find((tv) => tv.vaiTroThanhVien === "ChuHo");
   const thanhVien = hoKhau?.thanhVien?.filter(
     (tv) => tv.vaiTroThanhVien !== "ChuHo"
@@ -111,7 +121,7 @@ const NormalUserHomePage = (props: Props) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
   const lichSuHoKhau =
-    lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoNguoiDung.lichSuHoKhau;
+    lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoQuanLy.lichSuHoKhau;
   return (
     <Fragment>
       {loading && lichSuHoKhauLoading && <Loading />}
@@ -119,7 +129,7 @@ const NormalUserHomePage = (props: Props) => {
         <div className="overflow-hidden bg-white py-4 pr-10">
           <div className="pl-4 py-5 sm:px-6 mt-2 ">
             <h3 className="text-3xl font-bold leading-6 text-indigo-700 mb-6 pb-6 border-b border-gray-300">
-              Thông tin hộ khẩu của bạn
+              Thông tin chi tiết hộ khẩu
             </h3>
           </div>
           <div>
@@ -156,7 +166,7 @@ const NormalUserHomePage = (props: Props) => {
                 <div className="space-x-2 ml-28">
                   <button
                     onClick={() => {
-                      navigate(`/thanhvien/${chuHo?.id}`);
+                      navigate(`/${chuHo?.id}`);
                     }}
                     className="m-0 text-indigo-500 cursor-pointer hover:text-indigo-700 hover:bg-indigo-300 text-left rounded transition w-fit"
                   >
@@ -281,4 +291,4 @@ const NormalUserHomePage = (props: Props) => {
   );
 };
 
-export default NormalUserHomePage;
+export default HoKhauDetail;
