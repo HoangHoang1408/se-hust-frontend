@@ -34,6 +34,12 @@ const navigation = [
     icon: BookOpenIcon,
     current: false,
   },
+  {
+    routes: ["/manager/tamtru", RegExp("/manager/tamtru/*")],
+    name: "Quản lí tạm trú",
+    icon: BookOpenIcon,
+    current: false,
+  },
 ];
 
 export type NavState = {
@@ -90,7 +96,7 @@ const ManagerLayout = (props: Props) => {
               <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-          <Outlet />
+          <Outlet /> 
         </div>
       </div>
     </Fragment>

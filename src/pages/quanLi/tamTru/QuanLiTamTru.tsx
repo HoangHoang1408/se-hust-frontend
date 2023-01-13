@@ -4,25 +4,22 @@ import { useTable } from "react-table";
 import { toast } from "react-toastify";
 import TextSearchInput from "../../../components/form/TextSearchInput";
 import PaginationNav from "../../../components/PaginationNav";
-import {
-  useDanhSachHoKhauLazyQuery,
-  VaiTroThanhVien,
-} from "../../../graphql/generated/schema";
+import { useXemDanhSachTamTruLazyQuery } from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
-type ByState = {
-  soHoKhau?: string;
-};
 
+type ByState = {
+  canCuocCongDan?: string;
+};
 type Props = {};
-const QuanLiHoKhau = (props: Props) => {
+const QuanLiTamTru = (props: Props) => {
   const navigate = useNavigate();
   const [openHanhDong, setOpenHanhDong] = useState<boolean>(false);
-  const [getHoKhau, { data: hoKhauData, loading }] = useDanhSachHoKhauLazyQuery(
-    {
+  const [getTamTru, { data: tamTruData, loading }] =
+    useXemDanhSachTamTruLazyQuery({
       onCompleted(data) {
-        const { xemDanhSachHoKhau } = data;
-        if (xemDanhSachHoKhau.error) {
-          toast.error(xemDanhSachHoKhau.error.message);
+        const { xemDanhSachTamTru } = data;
+        if (xemDanhSachTamTru.error) {
+          toast.error(xemDanhSachTamTru.error.message);
           return;
         }
       },
@@ -34,18 +31,18 @@ const QuanLiHoKhau = (props: Props) => {
         }
         toast.error("Lôi xảy ra, thử lại sau");
       },
-    }
-  );
+    });
   const [byState, setByState] = useState<ByState>({
-    soHoKhau: undefined,
+    canCuocCongDan: undefined,
   });
+
   const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    let { soHoKhau } = byState;
-    getHoKhau({
+    let { canCuocCongDan } = byState;
+    getTamTru({
       variables: {
         input: {
-          soHoKhau,
+          canCuocCongDan,
           paginationInput: {
             page,
             resultsPerPage: 16,
@@ -54,39 +51,42 @@ const QuanLiHoKhau = (props: Props) => {
       },
     });
   }, [byState, page]);
-  const hoKhaus = hoKhauData?.xemDanhSachHoKhau.hoKhau || [];
+
+  const tamTrus = tamTruData?.xemDanhSachTamTru?.tamTru || [];
   const columns = useMemo(() => {
     return [
       {
-        Header: "Số hộ khẩu",
+        Header: "Số tạm trú",
         // @ts-ignore
-        accessor: (row) => row["soHoKhau"],
+        accessor: (row) => row["id"],
       },
       {
-        Header: "Chủ hộ",
+        Header: "Người tạm trú",
         // @ts-ignore
         accessor: (row) => {
-          return row["thanhVien"].find(
-            // @ts-ignore
-            (tv) => tv.vaiTroThanhVien == VaiTroThanhVien.ChuHo
-          ).ten;
+          return row["nguoiTamTruId"];
         },
       },
       {
-        Header: "Địa chỉ thường trú",
+        Header: "Nơi tạm trú hiện tại",
         // @ts-ignore
-        accessor: (row) => row["diaChiThuongTru"],
-      },
-      {
-        Header: "Số lượng thành viên",
-        // @ts-ignore
-        accessor: (row) => row["thanhVien"].length,
+        accessor: (row) => row["noiTamTruHienTai"],
       },
       {
         Header: "Ngày tạo",
         // @ts-ignore
         accessor: (row) =>
           new Date(row["createdAt"]).toLocaleDateString("vi", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }),
+      },
+      {
+        Header: "Ngày hết hạn",
+        // @ts-ignore
+        accessor: (row) =>
+          row["ngayHetHan"].toLocaleDateString("vi", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
@@ -103,7 +103,7 @@ const QuanLiHoKhau = (props: Props) => {
             <div className="space-x-2">
               <button
                 onClick={() => {
-                  navigate(`/manager/hokhau/${data["id"]}`);
+                  navigate(`/manager/tamtru/${data["id"]}`);
                 }}
                 className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
               >
@@ -115,9 +115,11 @@ const QuanLiHoKhau = (props: Props) => {
       },
     ];
   }, []);
-  const data = useMemo(() => hoKhaus || [], [hoKhaus]);
+  const data = useMemo(() => tamTrus || [], [tamTrus]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
+  console.log(tamTruData);
+
   return (
     <Fragment>
       <main className="flex-1 mb-8">
@@ -125,12 +127,12 @@ const QuanLiHoKhau = (props: Props) => {
         <div className="border-b border-gray-200 mt-4 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-semibold leading-6 text-gray-900 sm:truncate">
-              Quản lí hộ khẩu
+              Quản lí tạm trú
             </h1>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 flex space-x-3">
             <TextSearchInput
-              labelText="Số hộ khẩu"
+              labelText="Số căn cước công dân"
               setText={(v) => setByState((pre) => ({ ...pre, soHoKhau: v }))}
             />
             <div
@@ -152,14 +154,13 @@ const QuanLiHoKhau = (props: Props) => {
                 <div className="absolute border-2 top-full left-1/2 transform -translate-x-1/2 w-max rounded bg-gray-200 p-1 z-20 flex flex-col space-y-1 text-center">
                   {[
                     { title: "Thêm mới", route: "add" },
-                    { title: "Cập nhật", route: "update" },
-                    { title: "Phân chia", route: "split" },
+                    { title: "Chỉnh sửa", route: "edit" },
                   ].map(({ route, title }) => {
                     return (
                       <h1
                         onClick={() => {
                           setOpenHanhDong(false);
-                          navigate(`/manager/hokhau/${route}`);
+                          navigate(`/manager/tamtru/${route}`);
                         }}
                         className="h-full w-full p-2 bg-white font-medium hover:bg-indigo-600 hover:text-white rounded cursor-pointer"
                       >
@@ -173,7 +174,7 @@ const QuanLiHoKhau = (props: Props) => {
           </div>
         </div>
         {/* {loading && <Loading />} */}
-        {!loading && hoKhaus && (
+        {!loading && tamTrus && (
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full align-middle">
@@ -224,7 +225,7 @@ const QuanLiHoKhau = (props: Props) => {
                   currentPage={page}
                   setCurrentPage={setPage}
                   totalPage={
-                    hoKhauData?.xemDanhSachHoKhau.paginationOutput
+                    tamTruData?.xemDanhSachTamTru?.paginationOutput
                       ?.totalPages || 0
                   }
                 />
@@ -237,4 +238,4 @@ const QuanLiHoKhau = (props: Props) => {
   );
 };
 
-export default QuanLiHoKhau;
+export default QuanLiTamTru;

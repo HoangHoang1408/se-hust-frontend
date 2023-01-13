@@ -113,7 +113,7 @@ const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
   );
 };
 
-const ThemHoKhau: FC = () => {
+const CapNhatHoKhau: FC = () => {
   const navigate = useNavigate();
   const [thanhVien, setThanhVien] = useState<
     { user: UserFragmentFragment; vaiTro: VaiTroThanhVien | null }[]
@@ -218,6 +218,7 @@ const ThemHoKhau: FC = () => {
                 })
               }
             />
+            
             <h1 className="text-lg font-semibold text-indigo-700 mb-1">
               Danh sách
             </h1>
@@ -329,4 +330,4 @@ const ThemHoKhau: FC = () => {
     </form>
   );
 };
-export default ThemHoKhau;
+export default CapNhatHoKhau;
