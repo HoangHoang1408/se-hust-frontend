@@ -52,7 +52,7 @@ function App() {
             <Route path="tamtru">
               <Route index element={<QuanLiTamTru />} />
               <Route path="add" element={<AddTamTru />} />
-              <Route path=":edit" element={<EditTamTru />} />
+              <Route path="edit" element={<EditTamTru />} />
             </Route>
           </Route>
           <Route path="/account" element={<KeToanLayout />}>
