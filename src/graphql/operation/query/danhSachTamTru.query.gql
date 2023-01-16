@@ -10,7 +10,9 @@ query xemDanhSachTamTru($input: xemDanhSachTamTruInput!) {
       totalResults
     }
     tamTru {
-      id
+      nguoiTamTru {
+        ...UserFragment
+      }
       createdAt
       updatedAt
       ngayHetHanTamTru

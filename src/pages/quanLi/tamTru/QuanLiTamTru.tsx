@@ -64,7 +64,14 @@ const QuanLiTamTru = (props: Props) => {
         Header: "Người tạm trú",
         // @ts-ignore
         accessor: (row) => {
-          return row["nguoiTamTruId"];
+          return row["nguoiTamTru"].ten;
+        },
+      },
+      {
+        Header: "Căn cước công dân",
+        // @ts-ignore
+        accessor: (row) => {
+          return row["nguoiTamTru"].canCuocCongDan;
         },
       },
       {
@@ -86,35 +93,16 @@ const QuanLiTamTru = (props: Props) => {
         Header: "Ngày hết hạn",
         // @ts-ignore
         accessor: (row) =>
-          row["ngayHetHan"].toLocaleDateString("vi", {
+          new Date(row["ngayHetHanTamTru"]).toLocaleDateString("vi", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
           }),
       },
-      {
-        Header: "Hành động",
-        //@ts-ignore
-        accessor: (row) => row,
-        // @ts-ignore
-        Cell: (row) => {
-          const data = row["row"]["original"];
-          return (
-            <div className="space-x-2">
-              <button
-                onClick={() => {
-                  navigate(`/manager/tamtru/${data["id"]}`);
-                }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
-              >
-                Chi tiết
-              </button>
-            </div>
-          );
-        },
-      },
+      
     ];
   }, []);
+  console.log(tamTrus);
   const data = useMemo(() => tamTrus || [], [tamTrus]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
@@ -133,7 +121,9 @@ const QuanLiTamTru = (props: Props) => {
           <div className="mt-4 sm:mt-0 sm:ml-16 flex space-x-3">
             <TextSearchInput
               labelText="Số căn cước công dân"
-              setText={(v) => setByState((pre) => ({ ...pre, soHoKhau: v }))}
+              setText={(v) =>
+                setByState((pre) => ({ ...pre, canCuocCongDan: v }))
+              }
             />
             <div
               className="relative"
