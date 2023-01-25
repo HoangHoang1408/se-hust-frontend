@@ -4,10 +4,9 @@ import { cloneDeep } from "lodash";
 import { Fragment, SVGProps, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
-
 const navigation = [
   {
-    routes: ["/", "/hokhau", RegExp("/hokhau/*")],
+    routes: ["/", "/hokhau", RegExp("^/hokhau/*"), RegExp("^/thanhvien/*")],
     name: "Hộ khẩu",
     icon: BookOpenIcon,
     current: true,

@@ -18,6 +18,9 @@ import QuanLiHoKhau from "./pages/quanLi/hoKhau/QuanLiHoKhau";
 import TachHoKhau from "./pages/quanLi/hoKhau/TachHoKhau";
 import ThemHoKhau from "./pages/quanLi/hoKhau/ThemHoKhau";
 import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
+import AddTamTru from "./pages/quanLi/tamTru/AddTamTru";
+import EditTamTru from "./pages/quanLi/tamTru/EditTamTru";
+import QuanLiTamTru from "./pages/quanLi/tamTru/QuanLiTamTru";
 import AddUser from "./pages/quanLi/user/AddUser";
 import EditUser from "./pages/quanLi/user/EditUser";
 import UserDetails from "./pages/quanLi/user/UserDetails";
@@ -45,10 +48,15 @@ function App() {
             </Route>
             <Route path="hokhau">
               <Route index element={<QuanLiHoKhau />} />
-              <Route path="add" element={<ThemHoKhau />} />
-              <Route path="split" element={<TachHoKhau />} />
+              <Route path="them" element={<ThemHoKhau />} />
+              <Route path="phanchia/:id" element={<TachHoKhau />} />
               <Route path=":id" element={<HoKhauDetail />} />
-              <Route path="update" element={<CapNhatHoKhau />} />
+              <Route path="capnhat/:id" element={<CapNhatHoKhau />} />
+            </Route>
+            <Route path="tamtru">
+              <Route index element={<QuanLiTamTru />} />
+              <Route path="add" element={<AddTamTru />} />
+              <Route path="edit" element={<EditTamTru />} />
             </Route>
           </Route>
           <Route path="/account" element={<KeToanLayout />}>

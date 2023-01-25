@@ -4,25 +4,22 @@ import { useTable } from "react-table";
 import { toast } from "react-toastify";
 import TextSearchInput from "../../../components/form/TextSearchInput";
 import PaginationNav from "../../../components/PaginationNav";
-import {
-  useDanhSachHoKhauLazyQuery,
-  VaiTroThanhVien,
-} from "../../../graphql/generated/schema";
+import { useXemDanhSachTamTruLazyQuery } from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
-type ByState = {
-  soHoKhau?: string;
-};
 
+type ByState = {
+  canCuocCongDan?: string;
+};
 type Props = {};
-const QuanLiHoKhau = (props: Props) => {
+const QuanLiTamTru = (props: Props) => {
   const navigate = useNavigate();
   const [openHanhDong, setOpenHanhDong] = useState<boolean>(false);
-  const [getHoKhau, { data: hoKhauData, loading }] = useDanhSachHoKhauLazyQuery(
-    {
+  const [getTamTru, { data: tamTruData, loading }] =
+    useXemDanhSachTamTruLazyQuery({
       onCompleted(data) {
-        const { xemDanhSachHoKhau } = data;
-        if (xemDanhSachHoKhau.error) {
-          toast.error(xemDanhSachHoKhau.error.message);
+        const { xemDanhSachTamTru } = data;
+        if (xemDanhSachTamTru.error) {
+          toast.error(xemDanhSachTamTru.error.message);
           return;
         }
       },
@@ -34,18 +31,18 @@ const QuanLiHoKhau = (props: Props) => {
         }
         toast.error("Lôi xảy ra, thử lại sau");
       },
-    }
-  );
+    });
   const [byState, setByState] = useState<ByState>({
-    soHoKhau: undefined,
+    canCuocCongDan: undefined,
   });
+
   const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    let { soHoKhau } = byState;
-    getHoKhau({
+    let { canCuocCongDan } = byState;
+    getTamTru({
       variables: {
         input: {
-          soHoKhau,
+          canCuocCongDan,
           paginationInput: {
             page,
             resultsPerPage: 16,
@@ -54,33 +51,28 @@ const QuanLiHoKhau = (props: Props) => {
       },
     });
   }, [byState, page]);
-  const hoKhaus = hoKhauData?.xemDanhSachHoKhau.hoKhau || [];
+
+  const tamTrus = tamTruData?.xemDanhSachTamTru?.tamTru || [];
   const columns = useMemo(() => {
     return [
       {
-        Header: "Số hộ khẩu",
-        // @ts-ignore
-        accessor: (row) => row["soHoKhau"],
-      },
-      {
-        Header: "Chủ hộ",
+        Header: "Người tạm trú",
         // @ts-ignore
         accessor: (row) => {
-          return row["thanhVien"].find(
-            // @ts-ignore
-            (tv) => tv.vaiTroThanhVien == VaiTroThanhVien.ChuHo
-          ).ten;
+          return row["nguoiTamTru"].ten;
         },
       },
       {
-        Header: "Địa chỉ thường trú",
+        Header: "Căn cước công dân",
         // @ts-ignore
-        accessor: (row) => row["diaChiThuongTru"],
+        accessor: (row) => {
+          return row["nguoiTamTru"].canCuocCongDan;
+        },
       },
       {
-        Header: "Số lượng thành viên",
+        Header: "Nơi tạm trú hiện tại",
         // @ts-ignore
-        accessor: (row) => row["thanhVien"].length,
+        accessor: (row) => row["noiTamTruHienTai"],
       },
       {
         Header: "Ngày tạo",
@@ -93,47 +85,23 @@ const QuanLiHoKhau = (props: Props) => {
           }),
       },
       {
-        Header: "Hành động",
-        //@ts-ignore
-        accessor: (row) => row,
+        Header: "Ngày hết hạn",
         // @ts-ignore
-        Cell: (row) => {
-          const data = row["row"]["original"];
-          return (
-            <div className="space-x-2">
-              <button
-                onClick={() => {
-                  navigate(`/manager/hokhau/${data["id"]}`);
-                }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
-              >
-                Chi tiết
-              </button>
-              <button
-                onClick={() => {
-                  navigate(`/manager/hokhau/capnhat/${data["id"]}`);
-                }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
-              >
-                Cập nhật
-              </button>
-              <button
-                onClick={() => {
-                  navigate(`/manager/hokhau/phanchia/${data["id"]}`);
-                }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
-              >
-                Tách
-              </button>
-            </div>
-          );
-        },
+        accessor: (row) =>
+          new Date(row["ngayHetHanTamTru"]).toLocaleDateString("vi", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }),
       },
     ];
   }, []);
-  const data = useMemo(() => hoKhaus || [], [hoKhaus]);
+  console.log(tamTrus);
+  const data = useMemo(() => tamTrus || [], [tamTrus]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
+  console.log(tamTruData);
+
   return (
     <Fragment>
       <main className="flex-1 mb-8">
@@ -141,13 +109,15 @@ const QuanLiHoKhau = (props: Props) => {
         <div className="border-b border-gray-200 mt-4 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-semibold leading-6 text-gray-900 sm:truncate">
-              Quản lí hộ khẩu
+              Quản lí tạm trú
             </h1>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 flex space-x-3">
             <TextSearchInput
-              labelText="Số hộ khẩu"
-              setText={(v) => setByState((pre) => ({ ...pre, soHoKhau: v }))}
+              labelText="Số căn cước công dân"
+              setText={(v) =>
+                setByState((pre) => ({ ...pre, canCuocCongDan: v }))
+              }
             />
             <div
               className="relative"
@@ -167,16 +137,14 @@ const QuanLiHoKhau = (props: Props) => {
               {openHanhDong && (
                 <div className="absolute border-2 top-full left-1/2 transform -translate-x-1/2 w-max rounded bg-gray-200 p-1 z-20 flex flex-col space-y-1 text-center">
                   {[
-                    { title: "Thêm mới", route: "them" },
-                    // { title: "Cập nhật", route: "update" },
-                    // { title: "Phân chia", route: "split" },
+                    { title: "Thêm mới", route: "add" },
+                    { title: "Chỉnh sửa", route: "edit" },
                   ].map(({ route, title }) => {
                     return (
                       <h1
-                        key={title}
                         onClick={() => {
                           setOpenHanhDong(false);
-                          navigate(`/manager/hokhau/${route}`);
+                          navigate(`/manager/tamtru/${route}`);
                         }}
                         className="h-full w-full p-2 bg-white font-medium hover:bg-indigo-600 hover:text-white rounded cursor-pointer"
                       >
@@ -190,7 +158,7 @@ const QuanLiHoKhau = (props: Props) => {
           </div>
         </div>
         {/* {loading && <Loading />} */}
-        {!loading && hoKhaus && (
+        {!loading && tamTrus && (
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full align-middle">
@@ -241,7 +209,7 @@ const QuanLiHoKhau = (props: Props) => {
                   currentPage={page}
                   setCurrentPage={setPage}
                   totalPage={
-                    hoKhauData?.xemDanhSachHoKhau.paginationOutput
+                    tamTruData?.xemDanhSachTamTru?.paginationOutput
                       ?.totalPages || 0
                   }
                 />
@@ -254,4 +222,4 @@ const QuanLiHoKhau = (props: Props) => {
   );
 };
 
-export default QuanLiHoKhau;
+export default QuanLiTamTru;
