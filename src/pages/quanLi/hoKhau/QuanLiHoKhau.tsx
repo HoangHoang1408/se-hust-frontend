@@ -109,6 +109,22 @@ const QuanLiHoKhau = (props: Props) => {
               >
                 Chi tiết
               </button>
+              <button
+                onClick={() => {
+                  navigate(`/manager/hokhau/capnhat/${data["id"]}`);
+                }}
+                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
+              >
+                Cập nhật
+              </button>
+              <button
+                onClick={() => {
+                  navigate(`/manager/hokhau/phanchia/${data["id"]}`);
+                }}
+                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
+              >
+                Tách
+              </button>
             </div>
           );
         },
@@ -151,9 +167,9 @@ const QuanLiHoKhau = (props: Props) => {
               {openHanhDong && (
                 <div className="absolute border-2 top-full left-1/2 transform -translate-x-1/2 w-max rounded bg-gray-200 p-1 z-20 flex flex-col space-y-1 text-center">
                   {[
-                    { title: "Thêm mới", route: "add" },
-                    { title: "Cập nhật", route: "update" },
-                    { title: "Phân chia", route: "split" },
+                    { title: "Thêm mới", route: "them" },
+                    // { title: "Cập nhật", route: "update" },
+                    // { title: "Phân chia", route: "split" },
                   ].map(({ route, title }) => {
                     return (
                       <h1

@@ -48,10 +48,10 @@ function App() {
             </Route>
             <Route path="hokhau">
               <Route index element={<QuanLiHoKhau />} />
-              <Route path="add" element={<ThemHoKhau />} />
-              <Route path="split" element={<TachHoKhau />} />
+              <Route path="them" element={<ThemHoKhau />} />
+              <Route path="phanchia/:id" element={<TachHoKhau />} />
               <Route path=":id" element={<HoKhauDetail />} />
-              <Route path="update" element={<CapNhatHoKhau />} />
+              <Route path="capnhat/:id" element={<CapNhatHoKhau />} />
             </Route>
             <Route path="tamtru">
               <Route index element={<QuanLiTamTru />} />

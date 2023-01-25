@@ -1,9 +1,7 @@
-import { XIcon } from "@heroicons/react/outline";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { cloneDeep } from "lodash";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { FormInput } from "../../../components/form/FormInput";

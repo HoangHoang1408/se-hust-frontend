@@ -1,18 +1,38 @@
+import { useReactiveVar } from "@apollo/client";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ArrowCircleLeftIcon } from "@heroicons/react/solid";
+import { PresentationChartBarIcon } from "@heroicons/react/outline";
+import { ArrowCircleLeftIcon, PencilAltIcon } from "@heroicons/react/solid";
 import { Dispatch, SetStateAction } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../../apollo/reactiveVar/loginStatusVar";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { logout, userVar } from "../../../apollo/reactiveVar/loginStatusVar";
 import { classNames } from "../../../common/utilFunctions";
+import { VaitroNguoiDung } from "../../../graphql/generated/schema";
 import { NavState } from "../../../layouts/ManagerLayout";
 import UserDropdown from "./UserDropdown";
 
+const checkMatchBaseRoutes = (route: string) => {
+  const routes = [
+    "/",
+    "/hokhau",
+    RegExp("^/hokhau/*"),
+    RegExp("^/thanhvien/*"),
+    "/thongtin",
+    "/changepassword",
+  ];
+  return routes.some((r) => {
+    if (r instanceof RegExp) {
+      return r.test(route);
+    } else return r === route;
+  });
+};
 type Props = {
   navState: NavState[];
   setNavState: Dispatch<SetStateAction<NavState[]>>;
 };
 const DesktopSidebar = ({ navState, setNavState }: Props) => {
+  const user = useReactiveVar(userVar);
+  const location = useLocation();
   const navigate = useNavigate();
   return (
     <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:pt-5 lg:pb-4 lg:bg-gray-100">
@@ -58,6 +78,44 @@ const DesktopSidebar = ({ navState, setNavState }: Props) => {
                 {item.name}
               </button>
             ))}
+            {user &&
+              [VaitroNguoiDung.ToTruong, VaitroNguoiDung.ToPho].includes(
+                user.vaiTroNguoiDung
+              ) &&
+              checkMatchBaseRoutes(location.pathname) && (
+                <button
+                  onClick={() => navigate("/manager")}
+                  className={classNames(
+                    "text-gray-700 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full"
+                  )}
+                >
+                  <PencilAltIcon
+                    className={
+                      "text-indigo-400 group-hover:text-indigo-600 mr-3 flex-shrink-0 h-6 w-6"
+                    }
+                    aria-hidden="true"
+                  />
+                  Quản lí
+                </button>
+              )}
+            {user &&
+              [VaitroNguoiDung.KeToan].includes(user.vaiTroNguoiDung) &&
+              checkMatchBaseRoutes(location.pathname) && (
+                <button
+                  onClick={() => navigate("/manager")}
+                  className={classNames(
+                    "text-gray-700 hover:text-gray-900 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full"
+                  )}
+                >
+                  <PresentationChartBarIcon
+                    className={
+                      "text-indigo-400 group-hover:text-indigo-600 mr-3 flex-shrink-0 h-6 w-6"
+                    }
+                    aria-hidden="true"
+                  />
+                  Kế toán
+                </button>
+              )}
           </div>
         </nav>
       </div>

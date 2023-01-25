@@ -56,11 +56,6 @@ const QuanLiTamTru = (props: Props) => {
   const columns = useMemo(() => {
     return [
       {
-        Header: "Số tạm trú",
-        // @ts-ignore
-        accessor: (row) => row["id"],
-      },
-      {
         Header: "Người tạm trú",
         // @ts-ignore
         accessor: (row) => {
@@ -99,7 +94,6 @@ const QuanLiTamTru = (props: Props) => {
             day: "2-digit",
           }),
       },
-      
     ];
   }, []);
   console.log(tamTrus);

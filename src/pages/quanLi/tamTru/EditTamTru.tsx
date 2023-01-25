@@ -1,9 +1,7 @@
-import { XIcon } from "@heroicons/react/outline";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { cloneDeep } from "lodash";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { FormInput } from "../../../components/form/FormInput";
@@ -114,7 +112,7 @@ const SearchInput: FC<Props> = ({ setNguoiDung }) => {
 const EditTamTru: FC = () => {
   const navigate = useNavigate();
   const [nguoiYeuCau, setNguoiYeuCau] = useState<UserFragmentFragment>();
-  const [themNguoiDung, { loading }] = useSuaThongTinTamTruMutation();
+  const [suaThongTinTamTru, { loading }] = useSuaThongTinTamTruMutation();
   const {
     register,
     formState: { errors },
@@ -136,11 +134,12 @@ const EditTamTru: FC = () => {
       toast.error("Vui lòng nhập người yêu cầu");
       return;
     }
-    themNguoiDung({
+    suaThongTinTamTru({
       variables: {
         input: {
           nguoiYeuCauId: nguoiYeuCau?.id,
           noiTamTruMoi: getValues("diaChi"),
+          
         },
       },
       onCompleted: (data) => {
