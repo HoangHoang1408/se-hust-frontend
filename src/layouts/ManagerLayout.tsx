@@ -44,6 +44,12 @@ const navigation = [
     icon: IdentificationIcon,
     current: false,
   },
+  {
+    routes: ["/manager/tamvang", RegExp("^/manager/tamvang/*")],
+    name: "Quản lí tạm vắng",
+    icon: IdentificationIcon,
+    current: false,
+  },
 ];
 
 export type NavState = {
