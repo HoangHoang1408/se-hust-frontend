@@ -1,15 +1,11 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import { FC, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import * as yup from "yup";
-import { FormInput } from "../../../components/form/FormInput";
 import LoadingButton from "../../../components/form/LoadingButton";
 import {
   useDanhSachNguoiDungLazyQuery,
+  useHetTamTruMutation,
   UserFragmentFragment,
-  useSuaThongTinTamTruMutation,
 } from "../../../graphql/generated/schema";
 import { loadingWhite } from "../../../images";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
@@ -109,47 +105,28 @@ const SearchInput: FC<Props> = ({ setNguoiDung }) => {
   );
 };
 
-const EditTamTru: FC = () => {
+const HetTamTru: FC = () => {
   const navigate = useNavigate();
   const [nguoiYeuCau, setNguoiYeuCau] = useState<UserFragmentFragment>();
-  const [suaThongTinTamTru, { loading }] = useSuaThongTinTamTruMutation();
-  const {
-    register,
-    formState: { errors },
-    getValues,
-    reset,
-    handleSubmit,
-  } = useForm<{
-    diaChi: string;
-  }>({
-    mode: "onBlur",
-    resolver: yupResolver(
-      yup.object().shape({
-        diaChi: yup.string().required("Vui lòng nhập địa chỉ tạm trú mới"),
-      })
-    ),
-  });
-  const submitHandler = async () => {
+  const [hetTamVang, { loading }] = useHetTamTruMutation();
+  const submitHandler = () => {
     if (!nguoiYeuCau) {
       toast.error("Vui lòng nhập người yêu cầu");
       return;
     }
-    suaThongTinTamTru({
+    hetTamVang({
       variables: {
         input: {
           nguoiYeuCauId: nguoiYeuCau?.id,
-          noiTamTruMoi: getValues("diaChi"),
-          
         },
       },
       onCompleted: (data) => {
-        if (data.suaThongTinTamTru.ok) {
-          toast.success("Sửa thông tin tạm trú thành công");
+        if (data.hetTamTru.ok) {
+          toast.success("Kết thúc thành công!");
           setNguoiYeuCau(undefined);
-          reset();
           return;
         }
-        const msg = data.suaThongTinTamTru.error?.message;
+        const msg = data.hetTamTru.error?.message;
         if (msg) {
           toast.error(msg);
           return;
@@ -167,12 +144,12 @@ const EditTamTru: FC = () => {
   };
   return (
     <form
-      onSubmit={handleSubmit(submitHandler)}
       className="space-y-8 pl-12 pr-16 pt-12 pb-16 "
+      onSubmit={submitHandler}
     >
       <div className="flex flex-col col-span-1">
         <h3 className="leading-6 font-semibold text-gray-900 text-3xl mb-8">
-          Sửa thông tin tạm trú
+          Kết thúc tạm trú
         </h3>
         <div className="grid grid-cols-2 gap-x-6">
           <div className="rounded-md shadow-md p-3 col-span-1 h-fit flex flex-col space-y-4">
@@ -192,19 +169,6 @@ const EditTamTru: FC = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-col space-y-3">
-              <label className="text-xl font-semibold text-indigo-700 -mb-2">
-                Nơi tạm trú mới
-              </label>
-              <div className="px-1">
-                <FormInput
-                  id="diaChi"
-                  registerReturn={register("diaChi", { required: true })}
-                  type="text"
-                  errorMessage={errors.diaChi && "Địa chỉ không được để trống"}
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -216,9 +180,9 @@ const EditTamTru: FC = () => {
         >
           Huỷ
         </button>
-        <LoadingButton loading={loading} text="Sửa" className="w-fit" />
+        <LoadingButton loading={loading} text="Kết thúc" className="w-fit" />
       </div>
     </form>
   );
 };
-export default EditTamTru;
+export default HetTamTru;

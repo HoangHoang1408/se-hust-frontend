@@ -139,6 +139,7 @@ const QuanLiTamTru = (props: Props) => {
                   {[
                     { title: "Thêm mới", route: "add" },
                     { title: "Chỉnh sửa", route: "edit" },
+                    { title: "Kết thúc", route: "end" },
                   ].map(({ route, title }) => {
                     return (
                       <h1

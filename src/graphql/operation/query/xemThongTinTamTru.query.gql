@@ -1,0 +1,22 @@
+query xemThongTinTamTru {
+  xemThongTinTamTru {
+    ok
+    error {
+      message
+      mainReason
+    }
+    tamTru {
+      createdAt
+      nguoiPheDuyet {
+        ...UserFragment
+      }
+      nguoiTamTru {
+        ...UserFragment
+      }
+      ngayHetHanTamTru
+      ghiChu
+      noiTamTruHienTai
+      ngayHetHieuLuc
+    }
+  }
+}

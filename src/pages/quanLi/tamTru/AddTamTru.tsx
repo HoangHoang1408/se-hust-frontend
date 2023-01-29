@@ -143,7 +143,7 @@ const AddTamTru: FC = () => {
       },
       onCompleted: (data) => {
         if (data.addTamTru.ok) {
-          toast.success("Thêm hộ khẩu thành công");
+          toast.success("Thêm thành công");
           setNguoiYeuCau(undefined);
           reset();
           return;

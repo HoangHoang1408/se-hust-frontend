@@ -10,6 +10,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ChangePassword from "./pages/nguoiDan/ChangePassword";
 import NormalUserHomePage from "./pages/nguoiDan/NormalUserHomePage";
+import TamTruUserPage from "./pages/nguoiDan/TamTru";
 import ThanhVien from "./pages/nguoiDan/ThanhVien";
 import UserDetailsForUsers from "./pages/nguoiDan/UserDetailsForUsers";
 import CapNhatHoKhau from "./pages/quanLi/hoKhau/CapNhatHoKhau";
@@ -20,7 +21,9 @@ import ThemHoKhau from "./pages/quanLi/hoKhau/ThemHoKhau";
 import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
 import AddTamTru from "./pages/quanLi/tamTru/AddTamTru";
 import EditTamTru from "./pages/quanLi/tamTru/EditTamTru";
+import HetTamTru from "./pages/quanLi/tamTru/HetTamTru";
 import QuanLiTamTru from "./pages/quanLi/tamTru/QuanLiTamTru";
+import ThongKeUser from "./pages/quanLi/thongKeUser/ThongKeUser";
 import AddUser from "./pages/quanLi/user/AddUser";
 import EditUser from "./pages/quanLi/user/EditUser";
 import UserDetails from "./pages/quanLi/user/UserDetails";
@@ -36,10 +39,11 @@ function App() {
             <Route index element={<NormalUserHomePage />} />
             <Route path="thanhvien/:id" element={<ThanhVien />} />
             <Route path="thongtin" element={<UserDetailsForUsers />} />
-            <Route path="changepassword" element={<ChangePassword />}></Route>
+            <Route path="changepassword" element={<ChangePassword />} />
+            <Route path="tamtru" element={<TamTruUserPage />} />
           </Route>
           <Route path="/manager" element={<ManagerLayout />}>
-            <Route index element={<ManagerHomePage />} />
+            <Route index element={<ThongKeUser />} />
             <Route path="users">
               <Route index element={<UserManager />} />
               <Route path="add" element={<AddUser />} />
@@ -57,6 +61,7 @@ function App() {
               <Route index element={<QuanLiTamTru />} />
               <Route path="add" element={<AddTamTru />} />
               <Route path="edit" element={<EditTamTru />} />
+              <Route path="end" element={<HetTamTru />} />
             </Route>
           </Route>
           <Route path="/account" element={<KeToanLayout />}>

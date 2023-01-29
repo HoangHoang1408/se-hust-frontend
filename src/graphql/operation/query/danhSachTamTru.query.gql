@@ -1,4 +1,4 @@
-query xemDanhSachTamTru($input: xemDanhSachTamTruInput!) {
+query xemDanhSachTamTru($input: XemDanhSachTamTruInput!) {
   xemDanhSachTamTru(input: $input) {
     ok
     error {

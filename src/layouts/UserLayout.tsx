@@ -12,6 +12,12 @@ const navigation = [
     current: true,
   },
   {
+    routes: ["/tamtru"],
+    name: "Tạm trú",
+    icon: BookOpenIcon,
+    current: false,
+  },
+  {
     routes: ["/thongtin"],
     name: "Thông tin cá nhân",
     icon: UserCircleIcon,
