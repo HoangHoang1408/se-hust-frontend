@@ -1,4 +1,4 @@
-mutation KetThucTamVang($input: hetTamVangInput!) {
+mutation KetThucTamVang($input: HetTamVangInput!) {
   hetTamVang(input: $input) {
     ok
     error {

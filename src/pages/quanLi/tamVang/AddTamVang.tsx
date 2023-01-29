@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,13 +7,11 @@ import * as yup from "yup";
 import { FormInput } from "../../../components/form/FormInput";
 import LoadingButton from "../../../components/form/LoadingButton";
 import {
-  UserFragmentFragment,
   useAddTamVangMutation,
+  UserFragmentFragment,
 } from "../../../graphql/generated/schema";
-import { loadingWhite } from "../../../images";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 import { SearchThanhVienInputs } from "../hoKhau/ThemHoKhau";
-
 
 const AddTamVang: FC = () => {
   const navigate = useNavigate();
@@ -52,7 +50,7 @@ const AddTamVang: FC = () => {
       },
       onCompleted: (data) => {
         if (data.addTamVang.ok) {
-          toast.success("Thêm hộ khẩu thành công");
+          toast.success("Thêm mới thành công");
           setNguoiYeuCau(undefined);
           reset();
           return;
@@ -89,9 +87,9 @@ const AddTamVang: FC = () => {
                 Người yêu cầu
               </h1>
               <SearchThanhVienInputs
-                setThanhVien={(nguoiYeuCau: UserFragmentFragment) =>
-                  {setNguoiYeuCau(nguoiYeuCau)}
-                }
+                setThanhVien={(nguoiYeuCau: UserFragmentFragment) => {
+                  setNguoiYeuCau(nguoiYeuCau);
+                }}
               />
               {nguoiYeuCau && (
                 <div className="mx-1 px-3 py-2 flex flex-col border border-indigo-500 rounded-md">
@@ -140,4 +138,3 @@ const AddTamVang: FC = () => {
   );
 };
 export default AddTamVang;
-

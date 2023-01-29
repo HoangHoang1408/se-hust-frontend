@@ -53,14 +53,9 @@ const QuanLiTamVang = (props: Props) => {
     });
   }, [byState, page]);
 
-  const tamVangs = tamVangData?.xemDanhSachTamVang?.tamVang|| [];
+  const tamVangs = tamVangData?.xemDanhSachTamVang?.tamVang || [];
   const columns = useMemo(() => {
     return [
-      {
-        Header: "Số tạm vắng",
-        // @ts-ignore
-        accessor: (row) => row["id"],
-      },
       {
         Header: "Người tạm vắng",
         // @ts-ignore
@@ -76,7 +71,7 @@ const QuanLiTamVang = (props: Props) => {
         },
       },
       {
-        Header:" Lý do tạm vắng",
+        Header: " Lý do tạm vắng",
         // @ts-ignore
         accessor: (row) => row["lyDoTamVang"],
       },
@@ -98,17 +93,16 @@ const QuanLiTamVang = (props: Props) => {
       {
         Header: "Ngày kết thúc tạm vắng",
         // @ts-ignore
-        accessor: (row) =>
-          {
-            if(row["ngayHetHieuLuc"]){
-              return new Date(row["ngayHetHieuLuc"]).toLocaleDateString("vi", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              })
-            }
-            return "Chưa xác định"
+        accessor: (row) => {
+          if (row["ngayHetHieuLuc"]) {
+            return new Date(row["ngayHetHieuLuc"]).toLocaleDateString("vi", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            });
           }
+          return "Chưa xác định";
+        },
       },
     ];
   }, []);
@@ -125,7 +119,7 @@ const QuanLiTamVang = (props: Props) => {
         <div className="border-b border-gray-200 mt-4 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-semibold leading-6 text-gray-900 sm:truncate">
-              Quản lí tạm vắng 
+              Quản lí tạm vắng
             </h1>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 flex space-x-3">
@@ -239,4 +233,3 @@ const QuanLiTamVang = (props: Props) => {
   );
 };
 export default QuanLiTamVang;
-

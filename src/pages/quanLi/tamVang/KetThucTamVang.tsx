@@ -1,6 +1,4 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { FC, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -27,7 +25,7 @@ const KetThucTamVang: FC = () => {
       },
       onCompleted: (data) => {
         if (data.hetTamVang.ok) {
-          toast.success("Đã hết tạm vắng!");
+          toast.success("Kết thúc tạm vắng thành công!");
           setNguoiYeuCau(undefined);
           return;
         }
@@ -48,9 +46,7 @@ const KetThucTamVang: FC = () => {
     });
   };
   return (
-    <form
-      className="space-y-8 pl-12 pr-16 pt-12 pb-16 "
-    >
+    <form className="space-y-8 pl-12 pr-16 pt-12 pb-16 ">
       <div className="flex flex-col col-span-1">
         <h3 className="leading-6 font-semibold text-gray-900 text-3xl mb-8">
           Kết thúc tạm vắng
@@ -77,7 +73,6 @@ const KetThucTamVang: FC = () => {
         </div>
       </div>
       <div className="pt-5 flex justify-end space-x-3">
-        
         <button
           onClick={() => navigate("/manager/tamvang")}
           type="button"
@@ -88,10 +83,10 @@ const KetThucTamVang: FC = () => {
         <button
           type="button"
           onClick={() => submitHandler()}
-        >  
-          Thêm
+          className="h-10 flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
+        >
+          Kết thúc
         </button>
-        {/* <LoadingButton loading={loading} text="Thêm" className="w-fit" /> */}
       </div>
     </form>
   );

@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,11 +7,9 @@ import * as yup from "yup";
 import { FormInput } from "../../../components/form/FormInput";
 import LoadingButton from "../../../components/form/LoadingButton";
 import {
-  useDanhSachNguoiDungLazyQuery,
   UserFragmentFragment,
   useSuaThongTinTamVangMutation,
 } from "../../../graphql/generated/schema";
-import { loadingWhite } from "../../../images";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 import { SearchThanhVienInputs } from "../hoKhau/ThemHoKhau";
 
@@ -28,14 +26,12 @@ const EditTamVang: FC = () => {
   } = useForm<{
     diaChi: string;
     lyDoTamVang: string;
-    bangTamVangId: string;
   }>({
     mode: "onBlur",
     resolver: yupResolver(
       yup.object().shape({
         diaChi: yup.string().required("Vui lòng nhập địa chỉ mới"),
         lyDoTamVang: yup.string().required("Vui lòng nhập lý do tạm vắng"),
-        bangTamVangId: yup.number().required("Vui lòng nhập mã tạm vắng"),
       })
     ),
   });
@@ -50,7 +46,6 @@ const EditTamVang: FC = () => {
           nguoiYeuCauId: nguoiYeuCau?.id,
           diaChiNoiDenMoi: getValues("diaChi"),
           lyDoTamVang: getValues("lyDoTamVang"),
-          bangTamVangId: getValues("bangTamVangId"),
         },
       },
       onCompleted: (data) => {
@@ -83,7 +78,7 @@ const EditTamVang: FC = () => {
     >
       <div className="flex flex-col col-span-1">
         <h3 className="leading-6 font-semibold text-gray-900 text-3xl mb-8">
-          Sửa thông tin tạm vắng
+          Cập nhật thông tin tạm vắng
         </h3>
         <div className="grid grid-cols-2 gap-x-6">
           <div className="rounded-md shadow-md p-3 col-span-1 h-fit flex flex-col space-y-4">
@@ -103,29 +98,18 @@ const EditTamVang: FC = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-4">
               <label className="text-xl font-semibold text-indigo-700 -mb-2">
                 Thông tin tạm vắng mới
               </label>
-              <div className="px-1">
-                <FormInput
-                  id="bangTamVangId"
-                  registerReturn={register("bangTamVangId", { required: true })}
-                  labelText="Mã tạm vắng (ban đầu)"
-                  type="number"
-                  errorMessage={errors.diaChi && "Mã tạm vắng không được để trống "}
-                />
-              </div>
-              <div className="px-2">
+              <div className="px-4 flex flex-col space-y-4">
                 <FormInput
                   id="diaChi"
                   registerReturn={register("diaChi", { required: true })}
                   labelText="Địa chỉ mới"
                   type="text"
-                  errorMessage={errors.diaChi && "Địa chỉ không được để trống"}
+                  errorMessage={errors.diaChi?.message}
                 />
-              </div>
-              <div className="px-3">
                 <FormInput
                   id="lyDoTamVang"
                   registerReturn={register("lyDoTamVang")}
@@ -146,7 +130,7 @@ const EditTamVang: FC = () => {
         >
           Huỷ
         </button>
-        <LoadingButton loading={loading} text="Thêm" className="w-fit" />
+        <LoadingButton loading={loading} text="Cập nhật" className="w-fit" />
       </div>
     </form>
   );

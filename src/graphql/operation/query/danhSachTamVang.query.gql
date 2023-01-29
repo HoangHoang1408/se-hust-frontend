@@ -1,4 +1,4 @@
-query xemDanhSachTamVang($input: xemDanhSachTamVangInput!) {
+query xemDanhSachTamVang($input: XemDanhSachTamVangInput!) {
   xemDanhSachTamVang(input: $input) {
     ok
     error {
