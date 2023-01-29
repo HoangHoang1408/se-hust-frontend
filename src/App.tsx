@@ -21,6 +21,10 @@ import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
 import AddTamTru from "./pages/quanLi/tamTru/AddTamTru";
 import EditTamTru from "./pages/quanLi/tamTru/EditTamTru";
 import QuanLiTamTru from "./pages/quanLi/tamTru/QuanLiTamTru";
+import AddTamVang from "./pages/quanLi/tamVang/AddTamVang";
+import EditTamVang from "./pages/quanLi/tamVang/EditTamVang";
+import KetThucTamVang from "./pages/quanLi/tamVang/KetThucTamVang";
+import QuanLiTamVang from "./pages/quanLi/tamVang/QuanLiTamVang";
 import AddUser from "./pages/quanLi/user/AddUser";
 import EditUser from "./pages/quanLi/user/EditUser";
 import UserDetails from "./pages/quanLi/user/UserDetails";
@@ -57,6 +61,12 @@ function App() {
               <Route index element={<QuanLiTamTru />} />
               <Route path="add" element={<AddTamTru />} />
               <Route path="edit" element={<EditTamTru />} />
+            </Route>
+            <Route path="tamvang">
+              <Route index element={<QuanLiTamVang />} />
+              <Route path="add" element={<AddTamVang />} />
+              <Route path="edit" element={<EditTamVang />} />
+              <Route path="ketthuc" element={<KetThucTamVang />} />
             </Route>
           </Route>
           <Route path="/account" element={<KeToanLayout />}>
