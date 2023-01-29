@@ -1,4 +1,4 @@
-mutation suaThongTinTamTru($input: suaThongTinTamTruInput!) {
+mutation suaThongTinTamTru($input: SuaThongTinTamTruInput!) {
   suaThongTinTamTru(input: $input) {
     ok
     error {

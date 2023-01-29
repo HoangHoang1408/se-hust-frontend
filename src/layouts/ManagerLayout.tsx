@@ -4,7 +4,11 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { userVar } from "../apollo/reactiveVar/loginStatusVar";
 import { VaitroNguoiDung } from "../graphql/generated/schema";
 
-import { MenuAlt1Icon, UserGroupIcon } from "@heroicons/react/outline";
+import {
+  MenuAlt1Icon,
+  TableIcon,
+  UserGroupIcon,
+} from "@heroicons/react/outline";
 import {
   BookOpenIcon,
   ChartSquareBarIcon,
