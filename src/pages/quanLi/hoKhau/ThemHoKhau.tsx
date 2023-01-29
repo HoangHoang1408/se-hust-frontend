@@ -22,7 +22,7 @@ type Props = {
   setThanhVien: (thanhvien: UserFragmentFragment) => void;
 };
 
-const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
+export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
   const [canCuocCongDan, setCanCuocCongDan] = useState<string>("");
   const [getUsers, { loading }] = useDanhSachNguoiDungLazyQuery();
   const [results, setResults] = useState<UserFragmentFragment[]>([]);
