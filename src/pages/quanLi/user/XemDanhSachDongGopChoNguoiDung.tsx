@@ -62,6 +62,11 @@ const DanhSachDongGopChoNguoiDung: FC<Props> = () => {
         accessor: (row) => (row["trangThai"] ? "Đã đóng" : "Chưa đóng"),
       },
       {
+        Header: "Tên khoản phí",
+        // @ts-ignore
+        accessor: (row) => row["khoanPhi"].tenKhoanPhi,
+      },
+      {
         Header: "Ngày nộp",
         // @ts-ignore
         accessor: (row) =>

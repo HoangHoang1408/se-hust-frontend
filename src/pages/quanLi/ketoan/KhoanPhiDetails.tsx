@@ -89,7 +89,7 @@ const KhoanPhiDetails: FC<Props> = () => {
         // @ts-ignore
         accessor: (row) => {
           return row["nguoiTamTru"]
-            ? row["nguoiTamTru"].canCuocCongDan
+            ? row["nguoiTamTru"].ten
             : row["hoKhau"].soHoKhau;
         },
       },

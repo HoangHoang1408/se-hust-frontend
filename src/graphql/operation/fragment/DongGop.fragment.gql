@@ -11,4 +11,7 @@ fragment DongGopFragment on DongGop {
     id
     soHoKhau
   }
+  khoanPhi{
+    ...KhoanPhiFragment
+  }
 }

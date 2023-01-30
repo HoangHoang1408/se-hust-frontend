@@ -77,15 +77,14 @@ const AddKhoanPhi: FC<Props> = () => {
       },
       onError(err) {
         const msg = getApolloErrorMessage(err);
-        console.log(err);
+        // console.log(err);
         if (msg) toast.error(msg);
         else toast.error("Lỗi xảy ra, thử lại sau");
         throw new Error();
       },
     });
   };
-  console.log(errors);
-  console.log(getValues());
+  
 
   return (
     <form
