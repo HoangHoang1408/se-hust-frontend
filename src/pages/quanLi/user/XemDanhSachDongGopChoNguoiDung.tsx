@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
 import Loading from "../../../components/Loading";
-import {useDanhSachDongGopChoNguoiDungQuery } from "../../../graphql/generated/schema";
+import { useDanhSachDongGopChoNguoiDungQuery } from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 const InfoField: FC<{
   title: string;
@@ -69,19 +69,23 @@ const DanhSachDongGopChoNguoiDung: FC<Props> = () => {
       {
         Header: "Ngày nộp",
         // @ts-ignore
-        accessor: (row) =>
-          new Date(row["ngayNop"]).toLocaleDateString("vi", {
+        accessor: (row) => {
+          if (!row["ngayNop"]) return "Chưa đóng";
+          return new Date(row["ngayNop"]).toLocaleDateString("vi", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
-          }),
+          });
+        },
       },
       {
         Header: "Số tiền đóng góp",
         // @ts-ignore
-        accessor: (row) => row["soTienDongGop"],
+        accessor: (row) => {
+          if (!row["soTienDongGop"]) return "0";
+          return row["soTienDongGop"]
+        },
       },
-      
     ];
   }, []);
   const data = useMemo(() => donggops || [], [donggops]);
@@ -143,7 +147,6 @@ const DanhSachDongGopChoNguoiDung: FC<Props> = () => {
                     </tbody>
                   </table>
                 </div>
-                
               </div>
             </div>
           </div>
