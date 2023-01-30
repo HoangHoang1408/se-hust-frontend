@@ -18,6 +18,12 @@ const navigation = [
     current: false,
   },
   {
+    routes: ["/tamvang"],
+    name: "Tạm vắng",
+    icon: BookOpenIcon,
+    current: false,
+  },
+  {
     routes: ["/thongtin"],
     name: "Thông tin cá nhân",
     icon: UserCircleIcon,

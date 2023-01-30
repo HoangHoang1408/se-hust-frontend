@@ -19,6 +19,9 @@ const checkMatchBaseRoutes = (route: string) => {
     RegExp("^/thanhvien/*"),
     "/thongtin",
     "/changepassword",
+    "/tamtru",
+    "/tamvang",
+    "/account/user",
   ];
   return routes.some((r) => {
     if (r instanceof RegExp) {

@@ -1,9 +1,7 @@
-import { UserCircleIcon } from "@heroicons/react/solid";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
-import { VaitroNguoiDungDisplay } from "../../../common/constants";
 import TextSearchInput from "../../../components/form/TextSearchInput";
 import Loading from "../../../components/Loading";
 import PaginationNav from "../../../components/PaginationNav";
@@ -97,6 +95,13 @@ const DanhSachKhoanPhi = (props: Props) => {
         // @ts-ignore
         accessor: (row) => {
           return row["theoHoKhau"] ? "Có" : "Không";
+        },
+      },
+      {
+        Header: "Loại phí",
+        // @ts-ignore
+        accessor: (row) => {
+          return row["loaiPhi"] == LoaiPhi.BatBuoc ? "Bắt buộc" : "Ủng hộ";
         },
       },
       {

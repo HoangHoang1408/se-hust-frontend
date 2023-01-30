@@ -1,6 +1,6 @@
 import { FC, Fragment, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useXemThongTinTamTruQuery } from "../../graphql/generated/schema";
+import { useXemThongTinTamVangQuery } from "../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../utils/getApolloErrorMessage";
 
 const InfoField: FC<{
@@ -24,13 +24,13 @@ const InfoField: FC<{
 };
 type Props = {};
 
-const TamTruUserPage: FC<Props> = (props: Props) => {
-  const { data: tamTruData, loading } = useXemThongTinTamTruQuery({
+const TamVangUserPage: FC<Props> = (props: Props) => {
+  const { data: tamVangData, loading } = useXemThongTinTamVangQuery({
     onCompleted(data) {
-      const { xemThongTinTamTru } = data;
-      if (xemThongTinTamTru.error) {
-        if (xemThongTinTamTru.error) {
-          toast.error(xemThongTinTamTru.error.message);
+      const { xemThongTinTamVang } = data;
+      if (xemThongTinTamVang.error) {
+        if (xemThongTinTamVang.error) {
+          toast.error(xemThongTinTamVang.error.message);
           return;
         }
       }
@@ -44,30 +44,28 @@ const TamTruUserPage: FC<Props> = (props: Props) => {
       toast.error("Lỗi xảy ra, thử lại sau ");
     },
   });
-  const tamTru = tamTruData?.xemThongTinTamTru?.tamTru;
+  const tamVang = tamVangData?.xemThongTinTamVang?.tamVang;
   useEffect(() => {
-    if (!tamTru) return;
-  }, [tamTru]);
-  console.log(tamTru);
-  // console.log(tamTru?.nguoiTamTru.ten);
+    if (!tamVang) return;
+  }, [tamVang]);
 
   return (
     <Fragment>
       <div className="overflow-hidden bg-white py-4 pr-10">
         <div className="pl-4 py-5 sm:px-6 mt-2 ">
           <h3 className="text-3xl font-bold leading-6 text-indigo-700 mb-6 pb-6 border-b border-gray-300">
-            Thông tin tạm trú
+            Thông tin tạm vắng
           </h3>
         </div>
         <div className="grid grid-cols-12 pl-6">
           <div className="col-span-8 shadow-md rounded-sm">
             {[
-              ["Họ tên", tamTru?.nguoiTamTru.ten],
-              ["Nơi tạm trú hiện tại", tamTru?.noiTamTruHienTai],
+              ["Họ tên", tamVang?.nguoiTamVang.ten],
+              ["Địa chỉ nơi tạm vắng", tamVang?.diaChiNoiDen],
               [
-                "Ngày hết hạn tạm trú",
-                tamTru?.ngayHetHanTamTru
-                  ? new Date(tamTru.ngayHetHanTamTru).toLocaleDateString("vi", {
+                "Ngày hết hạn tạm vắng",
+                tamVang?.ngayHetHieuLuc
+                  ? new Date(tamVang.ngayHetHieuLuc).toLocaleDateString("vi", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
@@ -76,15 +74,15 @@ const TamTruUserPage: FC<Props> = (props: Props) => {
               ],
               [
                 "Ngày khai báo",
-                tamTru?.createdAt
-                  ? new Date(tamTru.createdAt).toLocaleDateString("vi", {
+                tamVang?.createdAt
+                  ? new Date(tamVang.createdAt).toLocaleDateString("vi", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
                     })
                   : "Chưa có thông tin",
               ],
-              ["Người phê duyệt", tamTru?.nguoiPheDuyet.ten],
+              ["Người phê duyệt", tamVang?.nguoiPheDuyet.ten],
             ].map(([title, value], i) => {
               let gray = true;
               if (i % 2 == 0) gray = false;
@@ -104,4 +102,4 @@ const TamTruUserPage: FC<Props> = (props: Props) => {
   );
 };
 
-export default TamTruUserPage;
+export default TamVangUserPage;

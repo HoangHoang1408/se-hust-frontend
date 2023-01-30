@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { omitBy } from "lodash";
 import { FC, Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -144,7 +145,7 @@ const EditUser: FC<Props> = () => {
       await editUser({
         variables: {
           input: {
-            ...getValues(),
+            ...omitBy(getValues(), (value) => value === ""),
             avatar: sendImage || undefined,
             nguoiYeuCauId: params.id!,
           },
@@ -165,26 +166,8 @@ const EditUser: FC<Props> = () => {
         },
       });
     } catch (err) {
-      // if (sendImage)
-      //   await axios.post(SERVER_URL + "/delete/file", {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     data: {
-      //       storagePath: sendImage.filePath,
-      //     },
-      //   });
+      toast.error("Lỗi xảy ra, thử lại sau");
     } finally {
-      // if (oldFilePath) {
-      //   await axios.post(SERVER_URL + "/delete/file", {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     data: {
-      //       storagePath: oldFilePath,
-      //     },
-      //   });
-      // }
       setLoadingMain(false);
     }
   };

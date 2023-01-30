@@ -1,10 +1,8 @@
-import { UserIcon } from "@heroicons/react/solid";
-import { FC, Fragment, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
 import Loading from "../../../components/Loading";
-import PaginationNav from "../../../components/PaginationNav";
 import {
   LoaiPhi,
   useKhoanPhiDetailsQuery,
@@ -72,12 +70,14 @@ const KhoanPhiDetails: FC<Props> = () => {
       {
         Header: "Ngày nộp",
         // @ts-ignore
-        accessor: (row) =>
-          new Date(row["ngayNop"]).toLocaleDateString("vi", {
+        accessor: (row) => {
+          if (!row["ngayNop"]) return "Chưa đóng";
+          return new Date(row["ngayNop"]).toLocaleDateString("vi", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
-          }),
+          });
+        },
       },
       {
         Header: "Số tiền đóng góp",
@@ -93,13 +93,7 @@ const KhoanPhiDetails: FC<Props> = () => {
             : row["hoKhau"].soHoKhau;
         },
       },
-      {
-        Header: "ID người tạm trú",
-        // @ts-ignore
-        accessor: (row) => {
-          return row["nguoiTamTru"] ? row["nguoiTamTru"].id : row["hoKhau"].id;
-        },
-      },
+
       {
         Header: "Hành động",
         //@ts-ignore

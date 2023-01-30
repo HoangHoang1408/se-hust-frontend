@@ -1,0 +1,21 @@
+query xemThongTinTamVang {
+  xemThongTinTamVang {
+    ok
+    error {
+      message
+      mainReason
+    }
+    tamVang {
+      createdAt
+      nguoiPheDuyet {
+        ...UserFragment
+      }
+      nguoiTamVang {
+        ...UserFragment
+      }
+      lyDoTamVang
+      diaChiNoiDen
+      ngayHetHieuLuc
+    }
+  }
+}
