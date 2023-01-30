@@ -1,4 +1,4 @@
-query xemDanhSachTamTru($input: XemDanhSachTamTruInput!) {
+query DanhSachTamTru($input: xemDanhSachTamTruInput!) {
   xemDanhSachTamTru(input: $input) {
     ok
     error {
@@ -10,14 +10,12 @@ query xemDanhSachTamTru($input: XemDanhSachTamTruInput!) {
       totalResults
     }
     tamTru {
-      nguoiTamTru {
-        ...UserFragment
-      }
+      id
       createdAt
       updatedAt
-      ngayHetHanTamTru
-      ghiChu
-      noiTamTruHienTai
+      nguoiTamTru{
+        ...UserFragment
+      }
     }
   }
 }
