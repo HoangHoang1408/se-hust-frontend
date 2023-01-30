@@ -1,0 +1,6 @@
+fragment HoKhauFragment on HoKhau {
+  id
+  soHoKhau
+  diaChiThuongTru
+  ghiChu
+}

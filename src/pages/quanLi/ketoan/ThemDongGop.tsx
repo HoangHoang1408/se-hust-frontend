@@ -1,56 +1,63 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { isBoolean } from "lodash";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { FormInput } from "../../../components/form/FormInput";
 import LoadingButton from "../../../components/form/LoadingButton";
-import { SERVER_URL } from "../../../config";
 import {
-  StoredFileInputType,
-  useAddTamTruMutation,
+   useThemDongGopMutation,
 } from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 
-type AddTamTruInputForm = {
-  nguoiTamTruId: string;
-  noiTamTruHienTai: string;
+type ThemDongGopInputForm = {
+  hoKhauId: number;
+  nguoiTamTruId: number;
+  soTien: number;
 };
-const AddTamTruInputSchema = yup.object().shape({
-  nguoiTamTruId: yup.string().required("Cần điền thông tin"),
-  noiTamTruHienTai: yup.string().required("Cần điền thông tin"),
+
+const ThemDongGopInputSchema = yup.object().shape({
+  soTien: yup.number().required("Cần điền thông tin"),
 });
 type Props = {};
-const AddTamTru: FC<Props> = () => {
+const ThemDongGop: FC<Props> = () => {
   const navigate = useNavigate();
-  const [images, setImages] = useState<File[]>();
-  const [loadingMain, setLoadingMain] = useState(false);
+  const params= useParams();
   const {
     register,
     formState: { errors },
     getValues,
     reset,
     handleSubmit,
-  } = useForm<AddTamTruInputForm>({
+  } = useForm<ThemDongGopInputForm>({
     mode: "onBlur",
-    resolver: yupResolver(AddTamTruInputSchema),
+    resolver: yupResolver(ThemDongGopInputSchema),
   });
 
-  const [AddTamTru] = useAddTamTruMutation();
+  const [ThemDongGop, { loading }] = useThemDongGopMutation();
   const submitHandler = async () => {
-    setLoadingMain(true);
-    await AddTamTru({
+    const {
+      soTien,
+      hoKhauId,
+      nguoiTamTruId,
+    } = getValues();
+    await ThemDongGop({
       variables: {
         input: {
-          ...getValues(),
-        },
+        KhoanPhiId:+params.id!,
+        soTienDongGop:+soTien,
+        hoKhauId:+hoKhauId,
+        nguoiTamTruId:+nguoiTamTruId,
+    },
       },
       onCompleted(data) {
-        const { addTamTru } = data;
-        if (addTamTru.error) {
-          toast.error(addTamTru.error.message);
+          console.log(data);
+        const { addDongGop } = data;
+        if (addDongGop.error) {
+          toast.error(addDongGop.error.message);
           throw new Error();
         }
         reset();
@@ -72,7 +79,7 @@ const AddTamTru: FC<Props> = () => {
       <div className="space-y-8 sm:space-y-5">
         <div className="flex flex-col">
           <h3 className="leading-6 font-semibold text-gray-900 text-2xl mb-8">
-            Thêm nhân khẩu
+            Thêm khoản phí
           </h3>
           <div className="space-y-4">
             <h1 className="text-indigo-700 font-bold text-lg mb-4">
@@ -81,19 +88,28 @@ const AddTamTru: FC<Props> = () => {
             <div className="pl-4 grid grid-cols-2 gap-x-8 gap-y-4">
               <div className="col-span-1">
                 <FormInput
+                  id="hoKhauId"
+                  registerReturn={register("hoKhauId")}
+                  labelText="Hộ khẩu"
+                  errorMessage={errors.hoKhauId?.message}
+                  type={"text"}
+                />
+              </div>
+              <div className="col-span-1">
+                <FormInput
                   id="nguoiTamTruId"
                   registerReturn={register("nguoiTamTruId")}
-                  labelText="ID người tạm trú (*)"
+                  labelText="Người tạm trú"
                   errorMessage={errors.nguoiTamTruId?.message}
                   type={"text"}
                 />
               </div>
               <div className="col-span-1">
                 <FormInput
-                  id="noiTamTruHienTai"
-                  registerReturn={register("noiTamTruHienTai")}
-                  labelText="Nơi tạm trú hiện tại (*)"
-                  errorMessage={errors.noiTamTruHienTai?.message}
+                  id="soTien"
+                  registerReturn={register("soTien")}
+                  labelText="Số Tiền"
+                  errorMessage={errors.soTien?.message}
                   type={"text"}
                 />
               </div>
@@ -103,20 +119,19 @@ const AddTamTru: FC<Props> = () => {
       </div>
       <div className="pt-5 flex justify-end space-x-3">
         <button
-          onClick={() => navigate("/tamtru/manager")}
+          onClick={() => navigate("/account")}
           type="button"
           className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Huỷ
         </button>
-        {/* <button onClick={handleSubmit(submitHandler)}>Thêm</button> */}
         <LoadingButton
-          loading={loadingMain}
-          text="Thêm tạm trú"
+          loading={loading}
+          text="Thêm Đóng Góp"
           className="w-fit"
         />
       </div>
     </form>
   );
 };
-export default AddTamTru;
+export default ThemDongGop;

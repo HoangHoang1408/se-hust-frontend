@@ -1,0 +1,9 @@
+mutation ThemDongGop($input: AddDongGopInput!) {
+  addDongGop(input: $input) {
+    ok
+    error {
+      message
+      mainReason
+    }
+  }
+}

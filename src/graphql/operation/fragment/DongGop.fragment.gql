@@ -1,0 +1,14 @@
+fragment DongGopFragment on DongGop {
+  id
+  trangThai
+  ngayNop
+  soTienDongGop
+  nguoiTamTru {
+    id
+    canCuocCongDan
+  }
+  hoKhau {
+    id
+    soHoKhau
+  }
+}
