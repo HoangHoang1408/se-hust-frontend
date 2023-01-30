@@ -94,7 +94,7 @@ export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
             {canShowResults && results.length === 0 && !loading && (
               <h1 className="text-center py-4 bg-white">
                 Nhập căn cước công dân đúng để tìm
-              </h1>
+              </h1> 
             )}
             {canShowResults &&
               results.length > 0 &&
@@ -107,7 +107,7 @@ export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
                       setCanShowResults(false);
                       setCanCuocCongDan("");
                     }}
-                    className="flex flex-col p-2 bg-white border border-indigo-500 rounded-md m-1 cursor-pointer hover:bg-indigo-500 hover:text-white"
+                    className="p-2 bg-white border border-indigo-500 rounded-md m-1 cursor-pointer hover:bg-indigo-500 hover:text-white"
                   >
                     <h1>Họ tên: {ten}</h1>
                     <h1>Căn cước công dân: {canCuocCongDan}</h1>
@@ -193,6 +193,7 @@ const ThemHoKhau: FC = () => {
       },
     });
   };
+  console.log(thanhVien)
   return (
     <form
       onSubmit={handleSubmit(submitHandler)}

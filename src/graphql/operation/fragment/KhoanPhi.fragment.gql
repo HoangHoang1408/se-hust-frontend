@@ -1,0 +1,9 @@
+fragment KhoanPhiFragment on KhoanPhi {
+  id
+  tenKhoanPhi
+  ngayPhatDong
+  soTien
+  ngayHetHan
+  theoHoKhau
+  loaiPhi
+}

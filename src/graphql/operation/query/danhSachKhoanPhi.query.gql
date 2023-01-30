@@ -1,0 +1,22 @@
+query DanhSachKhoanPhi($input:xemDanhSachKhoanPhiChoNguoiQuanLiInput!){
+    XemDanhSachKhoanPhiChoNguoiQuanLi(input: $input) {
+        ok
+        error {
+            mainReason
+            message
+        }
+        paginationOutput {
+            totalPages
+            totalResults
+        }
+        khoanPhi {
+            id
+            tenKhoanPhi
+            loaiPhi
+            ngayPhatDong
+            ngayHetHan
+            theoHoKhau
+            soTien
+        }
+    }
+}

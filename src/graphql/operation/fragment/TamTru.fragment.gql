@@ -1,0 +1,8 @@
+fragment TamTruFragment on TamTru {
+  id
+  ghiChu
+  ngayHetHanTamTru
+  nguoiTamTru{
+    ...UserFragment
+  }
+}

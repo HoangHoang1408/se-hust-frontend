@@ -1,0 +1,12 @@
+query DanhSachDongGopChoNguoiDung {
+  xemDanhSachDongGopChoNguoiDung {
+    ok
+    error {
+      mainReason
+      message
+    }
+   DongGop {
+    ...DongGopFragment
+   }
+  }
+}

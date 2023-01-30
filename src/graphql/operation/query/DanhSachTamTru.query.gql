@@ -1,4 +1,4 @@
-query XemDanhSachTamTru($input: XemDanhSachTamTruInput!) {
+query DanhSachTamTru($input: xemDanhSachTamTruInput!) {
   xemDanhSachTamTru(input: $input) {
     ok
     error {
@@ -13,7 +13,7 @@ query XemDanhSachTamTru($input: XemDanhSachTamTruInput!) {
       id
       createdAt
       updatedAt
-      nguoiTamTru {
+      nguoiTamTru{
         ...UserFragment
       }
     }

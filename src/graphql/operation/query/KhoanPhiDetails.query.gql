@@ -1,0 +1,18 @@
+query KhoanPhiDetails($input: XemKhoanPhiChiTietChoQuanLiInput!) {
+  xemKhoanPhiChiTietChoNguoiQuanLi(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+    khoanphi {
+      ...KhoanPhiFragment
+    }
+    tongtien
+    nDaDong
+    nChuaDong
+    donggop{
+        ...DongGopFragment
+    }
+  }
+}

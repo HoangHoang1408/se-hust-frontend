@@ -1,0 +1,9 @@
+mutation AddKhoanPhi($input: AddKhoanPhiInput!) {
+  addKhoanPhi(input: $input) {
+    ok
+    error {
+      message
+      mainReason
+    }
+  }
+}

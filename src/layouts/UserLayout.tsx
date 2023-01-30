@@ -1,4 +1,4 @@
-import { MenuAlt1Icon } from "@heroicons/react/outline";
+import { ChartPieIcon, MenuAlt1Icon } from "@heroicons/react/outline";
 import { BookOpenIcon, KeyIcon, UserCircleIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import { Fragment, SVGProps, useEffect, useState } from "react";
@@ -18,6 +18,12 @@ const navigation = [
     current: false,
   },
   {
+    routes: ["/tamvang"],
+    name: "Tạm vắng",
+    icon: BookOpenIcon,
+    current: false,
+  },
+  {
     routes: ["/thongtin"],
     name: "Thông tin cá nhân",
     icon: UserCircleIcon,
@@ -27,6 +33,12 @@ const navigation = [
     routes: ["/changepassword"],
     name: "Thay đổi mật khẩu",
     icon: KeyIcon,
+    current: false,
+  },
+  {
+    routes: ["/account/user"],
+    name: "Thông tin đóng góp",
+    icon: ChartPieIcon,
     current: false,
   },
 ];
