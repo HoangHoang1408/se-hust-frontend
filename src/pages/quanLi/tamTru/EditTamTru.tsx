@@ -1,46 +1,28 @@
-import { XIcon } from "@heroicons/react/outline";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { cloneDeep } from "lodash";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import { VaiTroThanhVienDisplay } from "../../../common/constants";
 import { FormInput } from "../../../components/form/FormInput";
 import LoadingButton from "../../../components/form/LoadingButton";
 import {
   useDanhSachNguoiDungLazyQuery,
   UserFragmentFragment,
-  useThemHoKhauMutation,
-  VaiTroThanhVien,
+  useSuaThongTinTamTruMutation,
 } from "../../../graphql/generated/schema";
 import { loadingWhite } from "../../../images";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 
 type Props = {
-  setThanhVien: (thanhvien: UserFragmentFragment) => void;
+  setNguoiDung: (thanhvien: UserFragmentFragment) => void;
 };
 
-export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
+const SearchInput: FC<Props> = ({ setNguoiDung }) => {
   const [canCuocCongDan, setCanCuocCongDan] = useState<string>("");
   const [getUsers, { loading }] = useDanhSachNguoiDungLazyQuery();
   const [results, setResults] = useState<UserFragmentFragment[]>([]);
   const [canShowResults, setCanShowResults] = useState<boolean>(false);
-
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    // @ts-ignore
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setCanShowResults(false);
-      }
-    };
-    document.addEventListener("click", handleClickOutside, true);
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
-  }, [ref]);
   useEffect(() => {
     if (canCuocCongDan.length === 0) {
       setResults([]);
@@ -79,7 +61,13 @@ export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
         <label htmlFor="" className="text-indigo-700 font-semibold">
           Tìm theo căn cước công dân
         </label>
-        <div ref={ref}>
+        <div
+          onBlur={() => {
+            setTimeout(() => {
+              setCanShowResults(false);
+            }, 100);
+          }}
+        >
           <input
             className="appearance-none block w-full h-8 px-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             type="text"
@@ -94,7 +82,7 @@ export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
             {canShowResults && results.length === 0 && !loading && (
               <h1 className="text-center py-4 bg-white">
                 Nhập căn cước công dân đúng để tìm
-              </h1> 
+              </h1>
             )}
             {canShowResults &&
               results.length > 0 &&
@@ -103,11 +91,11 @@ export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
                   <div
                     key={i}
                     onClick={() => {
-                      setThanhVien(results[i]);
+                      setNguoiDung(results[i]);
                       setCanShowResults(false);
                       setCanCuocCongDan("");
                     }}
-                    className="p-2 bg-white border border-indigo-500 rounded-md m-1 cursor-pointer hover:bg-indigo-500 hover:text-white"
+                    className="flex flex-col p-2 bg-white border border-indigo-500 rounded-md m-1 cursor-pointer hover:bg-indigo-500 hover:text-white"
                   >
                     <h1>Họ tên: {ten}</h1>
                     <h1>Căn cước công dân: {canCuocCongDan}</h1>
@@ -121,13 +109,10 @@ export const SearchThanhVienInputs: FC<Props> = ({ setThanhVien }) => {
   );
 };
 
-const ThemHoKhau: FC = () => {
+const EditTamTru: FC = () => {
   const navigate = useNavigate();
-  const [thanhVien, setThanhVien] = useState<
-    { user: UserFragmentFragment; vaiTro: VaiTroThanhVien | null }[]
-  >([]);
   const [nguoiYeuCau, setNguoiYeuCau] = useState<UserFragmentFragment>();
-  const [themHoKhau, { loading }] = useThemHoKhauMutation();
+  const [suaThongTinTamTru, { loading }] = useSuaThongTinTamTruMutation();
   const {
     register,
     formState: { errors },
@@ -140,44 +125,31 @@ const ThemHoKhau: FC = () => {
     mode: "onBlur",
     resolver: yupResolver(
       yup.object().shape({
-        diaChi: yup.string().required("Vui lòng nhập địa chỉ"),
+        diaChi: yup.string().required("Vui lòng nhập địa chỉ tạm trú mới"),
       })
     ),
   });
   const submitHandler = async () => {
-    if (thanhVien.length === 0) {
-      toast.error("Vui lòng thêm thành viên");
-      return;
-    }
     if (!nguoiYeuCau) {
       toast.error("Vui lòng nhập người yêu cầu");
       return;
     }
-    const allHaveVaiTro = thanhVien.every((tv) => tv.vaiTro);
-    if (!allHaveVaiTro) {
-      toast.error("Vui lòng chọn vai trò cho tất cả thành viên");
-      return;
-    }
-    themHoKhau({
+    suaThongTinTamTru({
       variables: {
         input: {
-          thanhVien: thanhVien.map((tv) => ({
-            id: tv.user.id,
-            vaiTroThanhVien: tv.vaiTro!,
-          })),
           nguoiYeuCauId: nguoiYeuCau?.id,
-          diaChiThuongTru: getValues("diaChi"),
+          noiTamTruMoi: getValues("diaChi"),
+          
         },
       },
       onCompleted: (data) => {
-        if (data.themHoKhau.ok) {
-          toast.success("Thêm hộ khẩu thành công");
-          setThanhVien([]);
+        if (data.suaThongTinTamTru.ok) {
+          toast.success("Sửa thông tin tạm trú thành công");
           setNguoiYeuCau(undefined);
           reset();
           return;
         }
-        const msg = data.themHoKhau.error?.message;
+        const msg = data.suaThongTinTamTru.error?.message;
         if (msg) {
           toast.error(msg);
           return;
@@ -193,7 +165,6 @@ const ThemHoKhau: FC = () => {
       },
     });
   };
-  console.log(thanhVien)
   return (
     <form
       onSubmit={handleSubmit(submitHandler)}
@@ -201,104 +172,16 @@ const ThemHoKhau: FC = () => {
     >
       <div className="flex flex-col col-span-1">
         <h3 className="leading-6 font-semibold text-gray-900 text-3xl mb-8">
-          Thêm hộ khẩu
+          Sửa thông tin tạm trú
         </h3>
         <div className="grid grid-cols-2 gap-x-6">
-          <div className="rounded-md shadow-md p-3 col-span-1 h-fit">
-            <h1 className="text-xl mb-2 font-semibold text-indigo-700">
-              Thành viên trong hộ khẩu
-            </h1>
-            <SearchThanhVienInputs
-              setThanhVien={(thanhVien: UserFragmentFragment) =>
-                setThanhVien((pre) => {
-                  const temp = cloneDeep(pre);
-                  const alreadyAdded = temp.some(
-                    (tv) => tv.user.id === thanhVien.id
-                  );
-                  if (alreadyAdded) {
-                    toast.error("Thành viên đã được thêm");
-                    return temp;
-                  }
-                  temp.push({
-                    user: thanhVien,
-                    vaiTro: null,
-                  });
-                  return temp;
-                })
-              }
-            />
-            <h1 className="text-lg font-semibold text-indigo-700 mb-1">
-              Danh sách
-            </h1>
-            {thanhVien.length > 0 && (
-              <div className="flex flex-col space-y-2 border border-indigo-500 rounded-md divide-y divide-indigo-300 ">
-                {thanhVien.map(({ user: { ten, canCuocCongDan } }, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex flex-col p-2 bg-white m-1 relative"
-                    >
-                      <div className="absolute top-2 right-1 w-fit h-fit bg-red-500 rounded-full flex items-center justify-center cursor-pointer">
-                        <XIcon
-                          onClick={() => {
-                            setThanhVien((pre) => {
-                              const temp = cloneDeep(pre);
-                              temp.splice(i, 1);
-                              return temp;
-                            });
-                          }}
-                          className="w-5 h-5 text-white cursor-pointer"
-                        />
-                      </div>
-                      <h1
-                        className="
-                      text-lg font-semibold text-indigo-700 mb-1
-                      "
-                      >
-                        Thành viên thứ {i + 1}:
-                      </h1>
-                      <div className="px-2 flex flex-col space-y-1">
-                        <h1>Họ tên: {ten}</h1>
-                        <h1>Căn cước công dân: {canCuocCongDan}</h1>
-                        <div className="flex items-center space-x-3">
-                          <label className="w-fit">Quan hệ với chủ hộ:</label>
-                          <select
-                            className="appearance-none block h-8 px-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm font-medium w-fit"
-                            onChange={(e) => {
-                              setThanhVien((pre) => {
-                                const temp = cloneDeep(pre);
-                                // @ts-ignore
-                                temp[i].vaiTro = e.target.value;
-                                return temp;
-                              });
-                            }}
-                            value={thanhVien[i].vaiTro || "Null"}
-                          >
-                            <option value="Null">Null</option>
-                            {Object.entries(VaiTroThanhVienDisplay).map((v) => {
-                              return (
-                                <option key={v[0]} value={v[0]}>
-                                  {v[1]}
-                                </option>
-                              );
-                            })}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
           <div className="rounded-md shadow-md p-3 col-span-1 h-fit flex flex-col space-y-4">
             <div>
               <h1 className="text-xl mb-2 font-semibold text-indigo-700">
                 Người yêu cầu
               </h1>
-              <SearchThanhVienInputs
-                setThanhVien={(nguoiYeuCau: UserFragmentFragment) =>
+              <SearchInput
+                setNguoiDung={(nguoiYeuCau: UserFragmentFragment) =>
                   setNguoiYeuCau(nguoiYeuCau)
                 }
               />
@@ -311,7 +194,7 @@ const ThemHoKhau: FC = () => {
             </div>
             <div className="flex flex-col space-y-3">
               <label className="text-xl font-semibold text-indigo-700 -mb-2">
-                Địa chỉ
+                Nơi tạm trú mới
               </label>
               <div className="px-1">
                 <FormInput
@@ -327,15 +210,15 @@ const ThemHoKhau: FC = () => {
       </div>
       <div className="pt-5 flex justify-end space-x-3">
         <button
-          onClick={() => navigate("/manager/hoKhau")}
+          onClick={() => navigate("/manager/tamtru")}
           type="button"
           className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Huỷ
         </button>
-        <LoadingButton loading={loading} text="Thêm" className="w-fit" />
+        <LoadingButton loading={loading} text="Sửa" className="w-fit" />
       </div>
     </form>
   );
 };
-export default ThemHoKhau;
+export default EditTamTru;

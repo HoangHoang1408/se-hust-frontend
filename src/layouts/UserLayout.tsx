@@ -1,21 +1,32 @@
 import { MenuAlt1Icon } from "@heroicons/react/outline";
-import { BookOpenIcon, UserCircleIcon } from "@heroicons/react/solid";
+import { BookOpenIcon, KeyIcon, UserCircleIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import { Fragment, SVGProps, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
-
 const navigation = [
   {
-    routes: ["/", "/hokhau", RegExp("/hokhau/*")],
+    routes: ["/", "/hokhau", RegExp("^/hokhau/*"), RegExp("^/thanhvien/*")],
     name: "Hộ khẩu",
     icon: BookOpenIcon,
     current: true,
   },
   {
+    routes: ["/tamtru"],
+    name: "Tạm trú",
+    icon: BookOpenIcon,
+    current: false,
+  },
+  {
     routes: ["/thongtin"],
     name: "Thông tin cá nhân",
     icon: UserCircleIcon,
+    current: false,
+  },
+  {
+    routes: ["/changepassword"],
+    name: "Thay đổi mật khẩu",
+    icon: KeyIcon,
     current: false,
   },
 ];

@@ -1,0 +1,9 @@
+mutation suaThongTinTamVang($input: SuaThongTinTamVangInput!) {
+  suaThongTinTamVang(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+  }
+}

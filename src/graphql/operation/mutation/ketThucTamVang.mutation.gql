@@ -1,0 +1,9 @@
+mutation KetThucTamVang($input: HetTamVangInput!) {
+  hetTamVang(input: $input) {
+    ok
+    error {
+      message
+      mainReason
+    }
+  }
+}

@@ -1,27 +1,36 @@
-import { Fragment, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useReactiveVar } from "@apollo/client";
+import { Fragment, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTable } from "react-table";
 import { toast } from "react-toastify";
+import { userVar } from "../../../apollo/reactiveVar/loginStatusVar";
 import {
   HanhDongHoKhauDisplay,
   VaiTroThanhVienDisplay,
-} from "../../common/constants";
-import Loading from "../../components/Loading";
+} from "../../../common/constants";
+import Loading from "../../../components/Loading";
 import {
-  useHoKhauQuery,
-  useLichSuHoKhauChoNguoiDungLazyQuery,
-} from "../../graphql/generated/schema";
-import { getApolloErrorMessage } from "../../utils/getApolloErrorMessage";
+  useHoKhauDetailQuery,
+  useLichSuHoKhauChoQuanLiQuery,
+} from "../../../graphql/generated/schema";
+import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 
 type Props = {};
 
-const NormalUserHomePage = (props: Props) => {
+const HoKhauDetail = (props: Props) => {
+  const user = useReactiveVar(userVar);
   const navigate = useNavigate();
-  const { data: hoKhauData, loading } = useHoKhauQuery({
+  const params = useParams();
+  const { data: hoKhauData, loading } = useHoKhauDetailQuery({
+    variables: {
+      input: {
+        hoKhauId: params.id!,
+      },
+    },
     onCompleted(data) {
-      const { xemHoKhauChiTietChoNguoiDung } = data;
-      if (xemHoKhauChiTietChoNguoiDung.error) {
-        toast.error(xemHoKhauChiTietChoNguoiDung.error.message);
+      const { xemHoKhauChiTietChoQuanLi } = data;
+      if (xemHoKhauChiTietChoQuanLi.error) {
+        toast.error(xemHoKhauChiTietChoQuanLi.error.message);
         return;
       }
     },
@@ -35,12 +44,17 @@ const NormalUserHomePage = (props: Props) => {
     },
   });
 
-  const [getLichSu, { data: lichSuHoKhauData, loading: lichSuHoKhauLoading }] =
-    useLichSuHoKhauChoNguoiDungLazyQuery({
+  const { data: lichSuHoKhauData, loading: lichSuHoKhauLoading } =
+    useLichSuHoKhauChoQuanLiQuery({
+      variables: {
+        input: {
+          hoKhauId: params.id!,
+        },
+      },
       onCompleted(data) {
-        const { xemLichSuThayDoiNhanKhauChoNguoiDung } = data;
-        if (xemLichSuThayDoiNhanKhauChoNguoiDung.error) {
-          toast.error(xemLichSuThayDoiNhanKhauChoNguoiDung.error.message);
+        const { xemLichSuThayDoiNhanKhauChoQuanLy } = data;
+        if (xemLichSuThayDoiNhanKhauChoQuanLy.error) {
+          toast.error(xemLichSuThayDoiNhanKhauChoQuanLy.error.message);
           return;
         }
       },
@@ -53,12 +67,6 @@ const NormalUserHomePage = (props: Props) => {
         toast.error("Lôi xảy ra, thử lại sau");
       },
     });
-
-  const hoKhau = hoKhauData?.xemHoKhauChiTietChoNguoiDung.hoKhau;
-  useEffect(() => {
-    if (!hoKhau) return;
-    getLichSu();
-  }, [hoKhau]);
 
   const columns = useMemo(() => {
     return [
@@ -92,9 +100,9 @@ const NormalUserHomePage = (props: Props) => {
             <div className="space-x-2">
               <button
                 onClick={() => {
-                  navigate(`/thanhvien/${data["id"]}`);
+                  navigate(`/manager/users/${data["id"]}`);
                 }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
+                className="font-semibold text-indigo-600 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
               >
                 Chi tiết
               </button>
@@ -104,6 +112,7 @@ const NormalUserHomePage = (props: Props) => {
       },
     ];
   }, []);
+  const hoKhau = hoKhauData?.xemHoKhauChiTietChoQuanLi.hoKhau;
   const chuHo = hoKhau?.thanhVien?.find((tv) => tv.vaiTroThanhVien === "ChuHo");
   const thanhVien = hoKhau?.thanhVien?.filter(
     (tv) => tv.vaiTroThanhVien !== "ChuHo"
@@ -112,22 +121,10 @@ const NormalUserHomePage = (props: Props) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
   const lichSuHoKhau =
-    lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoNguoiDung.lichSuHoKhau;
+    lichSuHoKhauData?.xemLichSuThayDoiNhanKhauChoQuanLy.lichSuHoKhau;
   return (
     <Fragment>
       {loading && lichSuHoKhauLoading && <Loading />}
-      {!loading && !lichSuHoKhauLoading && !hoKhau && (
-        <div className="overflow-hidden bg-white py-4 pr-10">
-          <div className="pl-4 py-5 sm:px-6 mt-2 ">
-            <h3 className="text-3xl font-bold leading-6 text-indigo-700 mb-6 pb-6 border-b border-gray-300">
-              Thông tin chi tiết hộ khẩu
-            </h3>
-            <h1 className="text-lg font-semibold leading-6 text-gray-700">
-              Người dùng hiện không có hộ khẩu hoặc hộ khẩu chưa được cấp
-            </h1>
-          </div>
-        </div>
-      )}
       {!loading && !lichSuHoKhauLoading && hoKhau && (
         <div className="overflow-hidden bg-white py-4 pr-10">
           <div className="pl-4 py-5 sm:px-6 mt-2 ">
@@ -180,7 +177,7 @@ const NormalUserHomePage = (props: Props) => {
               <div className="space-x-2 ml-28">
                 <button
                   onClick={() => {
-                    navigate(`/thanhVien/${chuHo?.id}`);
+                    navigate(`/manager/users/${chuHo?.id}`);
                   }}
                   className="text-indigo-600 cursor-pointer hover:text-indigo-700 hover:bg-indigo-300 text-left rounded transition w-fit p-1 text-sm font-semibold"
                 >
@@ -310,4 +307,4 @@ const NormalUserHomePage = (props: Props) => {
   );
 };
 
-export default NormalUserHomePage;
+export default HoKhauDetail;

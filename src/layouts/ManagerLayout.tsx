@@ -4,8 +4,16 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { userVar } from "../apollo/reactiveVar/loginStatusVar";
 import { VaitroNguoiDung } from "../graphql/generated/schema";
 
-import { MenuAlt1Icon, UserGroupIcon } from "@heroicons/react/outline";
-import { BookOpenIcon, ChartSquareBarIcon } from "@heroicons/react/solid";
+import {
+  MenuAlt1Icon,
+  TableIcon,
+  UserGroupIcon,
+} from "@heroicons/react/outline";
+import {
+  BookOpenIcon,
+  ChartSquareBarIcon,
+  IdentificationIcon,
+} from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
 
@@ -23,15 +31,27 @@ const navigation = [
     current: false,
   },
   {
-    routes: ["/manager/users", RegExp("/manager/users/*")],
+    routes: ["/manager/users", RegExp("^/manager/users/*")],
     name: "Quản lí người dùng",
     icon: UserGroupIcon,
     current: false,
   },
   {
-    routes: ["/manager/hokhau", RegExp("/manager/hokhau/*")],
+    routes: ["/manager/hokhau", RegExp("^/manager/hokhau/*")],
     name: "Quản lí hộ khẩu",
     icon: BookOpenIcon,
+    current: false,
+  },
+  {
+    routes: ["/manager/tamtru", RegExp("^/manager/tamtru/*")],
+    name: "Quản lí tạm trú",
+    icon: IdentificationIcon,
+    current: false,
+  },
+  {
+    routes: ["/manager/tamvang", RegExp("^/manager/tamvang/*")],
+    name: "Quản lí tạm vắng",
+    icon: IdentificationIcon,
     current: false,
   },
 ];

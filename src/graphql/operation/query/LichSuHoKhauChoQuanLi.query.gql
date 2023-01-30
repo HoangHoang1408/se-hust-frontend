@@ -1,0 +1,28 @@
+query LichSuHoKhauChoQuanLi($input: XemLichSuThayDoiNhanKhauInput!) {
+  xemLichSuThayDoiNhanKhauChoQuanLy(input: $input) {
+    ok
+    lichSuHoKhau {
+      hoKhau {
+        id
+        soHoKhau
+        diaChiThuongTru
+        ghiChu
+        createdAt
+        updatedAt
+      }
+      hanhDong
+      ghiChu
+      thoiGian
+      nguoiYeuCau {
+        ...UserFragment
+      }
+      nguoiPheDuyet {
+        ...UserFragment
+      }
+    }
+    error {
+      message
+      mainReason
+    }
+  }
+}

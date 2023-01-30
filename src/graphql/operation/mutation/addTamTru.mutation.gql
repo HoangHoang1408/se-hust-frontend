@@ -1,9 +1,9 @@
 mutation addTamTru($input: AddTamTruInput!) {
-    addTamTru(input: $input) {
-        ok
-        error {
-            mainReason
-            message
-        }
+  addTamTru(input: $input) {
+    ok
+    error {
+      message
+      mainReason
     }
+  }
 }

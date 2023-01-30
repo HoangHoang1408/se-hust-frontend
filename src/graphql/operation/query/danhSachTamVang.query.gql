@@ -1,0 +1,25 @@
+query xemDanhSachTamVang($input: XemDanhSachTamVangInput!) {
+  xemDanhSachTamVang(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+    paginationOutput {
+      totalPages
+      totalResults
+    }
+    tamVang {
+      nguoiTamVang {
+        ...UserFragment
+      }
+      id
+      createdAt
+      ngayBatDauTamVang
+      lyDoTamVang
+      diaChiNoiDen
+      ngayHetHieuLuc
+      updatedAt
+    }
+  }
+}

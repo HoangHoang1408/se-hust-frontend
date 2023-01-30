@@ -1,0 +1,9 @@
+mutation TachHoKhau($input: TachHoKhauInput!) {
+  tachHoKhau(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+  }
+}

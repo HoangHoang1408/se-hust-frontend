@@ -4,25 +4,22 @@ import { useTable } from "react-table";
 import { toast } from "react-toastify";
 import TextSearchInput from "../../../components/form/TextSearchInput";
 import PaginationNav from "../../../components/PaginationNav";
-import {
-  useDanhSachHoKhauLazyQuery,
-  VaiTroThanhVien,
-} from "../../../graphql/generated/schema";
+import { useXemDanhSachTamVangLazyQuery } from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
-type ByState = {
-  soHoKhau?: string;
-};
 
+type ByState = {
+  canCuocCongDan?: string;
+};
 type Props = {};
-const QuanLiHoKhau = (props: Props) => {
+const QuanLiTamVang = (props: Props) => {
   const navigate = useNavigate();
   const [openHanhDong, setOpenHanhDong] = useState<boolean>(false);
-  const [getHoKhau, { data: hoKhauData, loading }] = useDanhSachHoKhauLazyQuery(
-    {
+  const [getTamVang, { data: tamVangData, loading }] =
+    useXemDanhSachTamVangLazyQuery({
       onCompleted(data) {
-        const { xemDanhSachHoKhau } = data;
-        if (xemDanhSachHoKhau.error) {
-          toast.error(xemDanhSachHoKhau.error.message);
+        const { xemDanhSachTamVang } = data;
+        if (xemDanhSachTamVang.error) {
+          toast.error(xemDanhSachTamVang.error.message);
           return;
         }
       },
@@ -33,19 +30,20 @@ const QuanLiHoKhau = (props: Props) => {
           return;
         }
         toast.error("Lôi xảy ra, thử lại sau");
+        console.log(err);
       },
-    }
-  );
+    });
   const [byState, setByState] = useState<ByState>({
-    soHoKhau: undefined,
+    canCuocCongDan: undefined,
   });
+
   const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    let { soHoKhau } = byState;
-    getHoKhau({
+    let { canCuocCongDan } = byState;
+    getTamVang({
       variables: {
         input: {
-          soHoKhau,
+          canCuocCongDan,
           paginationInput: {
             page,
             resultsPerPage: 16,
@@ -54,86 +52,66 @@ const QuanLiHoKhau = (props: Props) => {
       },
     });
   }, [byState, page]);
-  const hoKhaus = hoKhauData?.xemDanhSachHoKhau.hoKhau || [];
+
+  const tamVangs = tamVangData?.xemDanhSachTamVang?.tamVang || [];
   const columns = useMemo(() => {
     return [
       {
-        Header: "Số hộ khẩu",
-        // @ts-ignore
-        accessor: (row) => row["soHoKhau"],
-      },
-      {
-        Header: "Chủ hộ",
+        Header: "Người tạm vắng",
         // @ts-ignore
         accessor: (row) => {
-          return row["thanhVien"].find(
-            // @ts-ignore
-            (tv) => tv.vaiTroThanhVien == VaiTroThanhVien.ChuHo
-          ).ten;
+          return row["nguoiTamVang"].ten;
         },
       },
       {
-        Header: "Địa chỉ thường trú",
+        Header: "Căn cước công dân",
         // @ts-ignore
-        accessor: (row) => row["diaChiThuongTru"],
+        accessor: (row) => {
+          return row["nguoiTamVang"].canCuocCongDan;
+        },
       },
       {
-        Header: "Số lượng thành viên",
+        Header: " Lý do tạm vắng",
         // @ts-ignore
-        accessor: (row) => row["thanhVien"].length,
+        accessor: (row) => row["lyDoTamVang"],
       },
       {
-        Header: "Ngày tạo",
+        Header: "Nơi chuyển đến",
+        // @ts-ignore
+        accessor: (row) => row["diaChiNoiDen"],
+      },
+      {
+        Header: "Ngày bắt đầu tạm vắng",
         // @ts-ignore
         accessor: (row) =>
-          new Date(row["createdAt"]).toLocaleDateString("vi", {
+          new Date(row["ngayBatDauTamVang"]).toLocaleDateString("vi", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
           }),
       },
       {
-        Header: "Hành động",
-        //@ts-ignore
-        accessor: (row) => row,
+        Header: "Ngày kết thúc tạm vắng",
         // @ts-ignore
-        Cell: (row) => {
-          const data = row["row"]["original"];
-          return (
-            <div className="space-x-2">
-              <button
-                onClick={() => {
-                  navigate(`/manager/hokhau/${data["id"]}`);
-                }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
-              >
-                Chi tiết
-              </button>
-              <button
-                onClick={() => {
-                  navigate(`/manager/hokhau/capnhat/${data["id"]}`);
-                }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
-              >
-                Cập nhật
-              </button>
-              <button
-                onClick={() => {
-                  navigate(`/manager/hokhau/phanchia/${data["id"]}`);
-                }}
-                className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
-              >
-                Tách
-              </button>
-            </div>
-          );
+        accessor: (row) => {
+          if (row["ngayHetHieuLuc"]) {
+            return new Date(row["ngayHetHieuLuc"]).toLocaleDateString("vi", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            });
+          }
+          return "Chưa xác định";
         },
       },
     ];
   }, []);
-  const data = useMemo(() => hoKhaus || [], [hoKhaus]);
+  console.log(tamVangs);
+  const data = useMemo(() => tamVangs || [], [tamVangs]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ data, columns });
+  console.log(tamVangData);
+
   return (
     <Fragment>
       <main className="flex-1 mb-8">
@@ -141,13 +119,15 @@ const QuanLiHoKhau = (props: Props) => {
         <div className="border-b border-gray-200 mt-4 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-semibold leading-6 text-gray-900 sm:truncate">
-              Quản lí hộ khẩu
+              Quản lí tạm vắng
             </h1>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 flex space-x-3">
             <TextSearchInput
-              labelText="Số hộ khẩu"
-              setText={(v) => setByState((pre) => ({ ...pre, soHoKhau: v }))}
+              labelText="Số căn cước công dân"
+              setText={(v) =>
+                setByState((pre) => ({ ...pre, canCuocCongDan: v }))
+              }
             />
             <div
               className="relative"
@@ -167,16 +147,15 @@ const QuanLiHoKhau = (props: Props) => {
               {openHanhDong && (
                 <div className="absolute border-2 top-full left-1/2 transform -translate-x-1/2 w-max rounded bg-gray-200 p-1 z-20 flex flex-col space-y-1 text-center">
                   {[
-                    { title: "Thêm mới", route: "them" },
-                    // { title: "Cập nhật", route: "update" },
-                    // { title: "Phân chia", route: "split" },
+                    { title: "Thêm mới", route: "add" },
+                    { title: "Chỉnh sửa", route: "edit" },
+                    { title: "Kết thúc", route: "ketthuc" },
                   ].map(({ route, title }) => {
                     return (
                       <h1
-                        key={title}
                         onClick={() => {
                           setOpenHanhDong(false);
-                          navigate(`/manager/hokhau/${route}`);
+                          navigate(`/manager/tamvang/${route}`);
                         }}
                         className="h-full w-full p-2 bg-white font-medium hover:bg-indigo-600 hover:text-white rounded cursor-pointer"
                       >
@@ -190,7 +169,7 @@ const QuanLiHoKhau = (props: Props) => {
           </div>
         </div>
         {/* {loading && <Loading />} */}
-        {!loading && hoKhaus && (
+        {!loading && tamVangs && (
           <div className="flex flex-col">
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full align-middle">
@@ -241,7 +220,7 @@ const QuanLiHoKhau = (props: Props) => {
                   currentPage={page}
                   setCurrentPage={setPage}
                   totalPage={
-                    hoKhauData?.xemDanhSachHoKhau.paginationOutput
+                    tamVangData?.xemDanhSachTamVang?.paginationOutput
                       ?.totalPages || 0
                   }
                 />
@@ -253,5 +232,4 @@ const QuanLiHoKhau = (props: Props) => {
     </Fragment>
   );
 };
-
-export default QuanLiHoKhau;
+export default QuanLiTamVang;

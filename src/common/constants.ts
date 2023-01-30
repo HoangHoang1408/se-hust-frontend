@@ -22,3 +22,16 @@ export enum VaitroNguoiDungDisplay {
   ToPho = "Tổ phó",
   KeToan = "Kế toán",
 }
+export enum HanhDongHoKhauDisplay {
+  TaoMoiHoKhau = "Tạo mới hộ khẩu",
+  CapNhatHoKhau = "Cập nhật hộ khẩu",
+  ThemThanhVien = "Thêm thành viên",
+  XoaThanhVien = "Xóa thành viên",
+  ThayDoiChuHo = "Thay đổi chủ hộ",
+  ThayDoiDiaChi = "Thay đổi địa chỉ",
+  ThayDoiVaiTro = "Thay đổi vai trò",
+  TachHoKhau = "Tách hộ khẩu",
+  XoaHoKhau = "Xóa hộ khẩu",
+  XoaNguoiKhoiHoKhau = "Xóa người khỏi hộ khẩu",
+  DangKyTamVang = "Đăng ký tạm vắng",
+}

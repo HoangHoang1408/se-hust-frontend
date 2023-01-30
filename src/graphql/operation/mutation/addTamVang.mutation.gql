@@ -1,0 +1,9 @@
+mutation addTamVang($input: AddTamVangInput!) {
+  addTamVang(input: $input) {
+    ok
+    error {
+      mainReason
+      message
+    }
+  }
+}

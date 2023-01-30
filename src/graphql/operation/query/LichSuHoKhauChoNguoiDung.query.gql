@@ -1,0 +1,28 @@
+query LichSuHoKhauChoNguoiDung {
+  xemLichSuThayDoiNhanKhauChoNguoiDung {
+    ok
+    lichSuHoKhau {
+      hoKhau {
+        id
+        soHoKhau
+        diaChiThuongTru
+        ghiChu
+        createdAt
+        updatedAt
+      }
+      hanhDong
+      ghiChu
+      thoiGian
+      nguoiYeuCau {
+        ...UserFragment
+      }
+      nguoiPheDuyet {
+        ...UserFragment
+      }
+    }
+    error {
+      message
+      mainReason
+    }
+  }
+}
