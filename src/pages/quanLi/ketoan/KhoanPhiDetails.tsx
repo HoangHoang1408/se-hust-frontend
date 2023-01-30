@@ -5,7 +5,10 @@ import { useTable } from "react-table";
 import { toast } from "react-toastify";
 import Loading from "../../../components/Loading";
 import PaginationNav from "../../../components/PaginationNav";
-import { useKhoanPhiDetailsQuery } from "../../../graphql/generated/schema";
+import {
+  LoaiPhi,
+  useKhoanPhiDetailsQuery,
+} from "../../../graphql/generated/schema";
 import { getApolloErrorMessage } from "../../../utils/getApolloErrorMessage";
 const InfoField: FC<{
   title: string;
@@ -85,14 +88,16 @@ const KhoanPhiDetails: FC<Props> = () => {
         Header: "Người tạm trú/Hộ khẩu",
         // @ts-ignore
         accessor: (row) => {
-          return row["nguoiTamTru"]?row["nguoiTamTru"].canCuocCongDan:row["hoKhau"].soHoKhau;
+          return row["nguoiTamTru"]
+            ? row["nguoiTamTru"].canCuocCongDan
+            : row["hoKhau"].soHoKhau;
         },
       },
       {
         Header: "ID người tạm trú",
         // @ts-ignore
         accessor: (row) => {
-          return row["nguoiTamTru"]?row["nguoiTamTru"].id:row["hoKhau"].id;
+          return row["nguoiTamTru"] ? row["nguoiTamTru"].id : row["hoKhau"].id;
         },
       },
       {
@@ -136,20 +141,41 @@ const KhoanPhiDetails: FC<Props> = () => {
             <div className="col-span-8 shadow-md rounded-sm">
               {[
                 ["Tên khoản phí", khoanphi.tenKhoanPhi],
-                ["Loại phí", khoanphi.loaiPhi],
-                ["Ngày phát động", khoanphi.ngayPhatDong],
-                ["Ngày hết hạn", khoanphi.ngayHetHan],
                 [
-                  "Số tiền đã thu được",
+                  "Loại phí",
+                  khoanphi.loaiPhi == LoaiPhi.BatBuoc ? "Bắt buộc" : "Ủng hộ",
+                ],
+                [
+                  "Ngày phát động",
+                  new Date(khoanphi.ngayPhatDong).toLocaleDateString("vi", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  }),
+                ],
+                [
+                  "Ngày hết hạn",
+                  new Date(khoanphi.ngayHetHan).toLocaleDateString("vi", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  }),
+                ],
+                [
+                  "Số tiền đã thu được(VNĐ)",
                   dataKhoanPhi?.xemKhoanPhiChiTietChoNguoiQuanLi.tongtien,
                 ],
                 [
                   "Số người đã đóng góp",
-                  dataKhoanPhi?.xemKhoanPhiChiTietChoNguoiQuanLi.nDaDong,
+                  dataKhoanPhi?.xemKhoanPhiChiTietChoNguoiQuanLi.nDaDong
+                    ? dataKhoanPhi?.xemKhoanPhiChiTietChoNguoiQuanLi.nDaDong
+                    : "0",
                 ],
                 [
                   "Số người chưa đóng góp",
-                  dataKhoanPhi?.xemKhoanPhiChiTietChoNguoiQuanLi.nChuaDong,
+                  dataKhoanPhi?.xemKhoanPhiChiTietChoNguoiQuanLi.nChuaDong
+                    ? dataKhoanPhi?.xemKhoanPhiChiTietChoNguoiQuanLi.nChuaDong
+                    : "0",
                 ],
               ].map(([title, value], i) => {
                 let gray = true;
@@ -157,9 +183,9 @@ const KhoanPhiDetails: FC<Props> = () => {
                 return (
                   <InfoField
                     key={i}
-                    title={title || ""}
+                    title={String(title) || ""}
                     gray={gray}
-                    value={value}
+                    value={String(value)}
                   />
                 );
               })}
@@ -211,23 +237,36 @@ const KhoanPhiDetails: FC<Props> = () => {
                     </tbody>
                   </table>
                 </div>
-                {/* <PaginationNav
-                  currentPage={page}
-                  setCurrentPage={setPage}
-                  totalPage={
-                    hoKhauData?.xemDanhSachHoKhau.paginationOutput
-                    ?.totalPages || 0
-                  }
-                /> */}
               </div>
             </div>
           </div>
           <div className="mt-6 flex justify-end">
             <button
               onClick={() => navigate("/account/show")}
-              className="px-5 py-2 bg-indigo-600 rounded text-white font-semibold hover:bg-indigo-700"
+              className="px-5 py-2 bg-indigo-600 rounded-lg text-white font-semibold hover:bg-indigo-700"
             >
               Trở về
+            </button>
+            <button
+              onClick={() => {
+                if (
+                  dataKhoanPhi.xemKhoanPhiChiTietChoNguoiQuanLi.khoanphi
+                    ?.loaiPhi == LoaiPhi.UngHo
+                )
+                  navigate(
+                    `/account/add/data.xemKhoanPhiChiTietChoNguoiQuanLi.khoanPhi.Id`
+                  );
+                if (
+                  dataKhoanPhi.xemKhoanPhiChiTietChoNguoiQuanLi.khoanphi
+                    ?.loaiPhi == LoaiPhi.BatBuoc
+                )
+                  navigate(
+                    `/account/edit/data.xemKhoanPhiChiTietChoNguoiQuanLi.khoanPhi.Id`
+                  );
+              }}
+              className=" px-5 py-2 bg-indigo-600 rounded-lg text-white font-semibold hover:bg-indigo-700 mx-5"
+            >
+              Cập nhật
             </button>
           </div>
         </div>

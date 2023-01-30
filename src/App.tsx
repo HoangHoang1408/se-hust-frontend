@@ -19,10 +19,9 @@ import QuanLiHoKhau from "./pages/quanLi/hoKhau/QuanLiHoKhau";
 import TachHoKhau from "./pages/quanLi/hoKhau/TachHoKhau";
 import ThemHoKhau from "./pages/quanLi/hoKhau/ThemHoKhau";
 import KhoanPhiDetails from "./pages/quanLi/ketoan/KhoanPhiDetails";
-import ThemDongGop from "./pages/quanLi/ketoan/ThemDongGop2";
+import ThemDongGop from "./pages/quanLi/ketoan/ThemDongGop";
 import AddKhoanPhi from "./pages/quanLi/ketoan/ThemKhoanPhi";
 import DanhSachKhoanPhi from "./pages/quanLi/ketoan/XemKhoanPhi";
-import ManagerHomePage from "./pages/quanLi/ManagerHomePage";
 import AddTamTru from "./pages/quanLi/tamTru/AddTamTru";
 import EditTamTru from "./pages/quanLi/tamTru/EditTamTru";
 import HetTamTru from "./pages/quanLi/tamTru/HetTamTru";
@@ -37,6 +36,7 @@ import EditUser from "./pages/quanLi/user/EditUser";
 import UserDetails from "./pages/quanLi/user/UserDetails";
 import UserManager from "./pages/quanLi/user/UserManager";
 import DanhSachDongGopChoNguoiDung from "./pages/quanLi/user/XemDanhSachDongGopChoNguoiDung";
+import EditDongGop from "./pages/quanLi/ketoan/EditDongGop";
 
 function App() {
   useGetUser();
@@ -88,7 +88,8 @@ function App() {
             <Route path="add" element={<AddKhoanPhi />} />
             <Route path="show" element={<DanhSachKhoanPhi />} />
             <Route path="khoanphi/:id" element={<KhoanPhiDetails />} />
-            <Route path="edit/:id" element={<ThemDongGop />} />
+            <Route path="edit/:id" element={<EditDongGop />} />
+            <Route path="add/:id" element={<ThemDongGop />} />
           </Route>
         </Route>
         <Route path="/auth">

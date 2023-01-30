@@ -4,15 +4,27 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { userVar } from "../apollo/reactiveVar/loginStatusVar";
 import { VaitroNguoiDung } from "../graphql/generated/schema";
 
-import { MenuAlt1Icon } from "@heroicons/react/outline";
-import { ChartPieIcon } from "@heroicons/react/solid";
+import { MenuAlt1Icon, UserCircleIcon } from "@heroicons/react/outline";
+import { ChartBarIcon, ChartPieIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
 
 const navigation = [
   {
-    routes: ["/account"],
-    name: "Thống kê",
+    routes: ["/thongtin"],
+    name: "Thông tin cá nhân",
+    icon: UserCircleIcon,
+    current: false,
+  },
+  {
+    routes: ["/account/show"],
+    name: "Kế toán",
+    icon: ChartBarIcon,
+    current: false,
+  },
+  {
+    routes: ["/account/user"],
+    name: "Thông tin đóng góp",
     icon: ChartPieIcon,
     current: false,
   },

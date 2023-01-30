@@ -1,4 +1,4 @@
-import { MenuAlt1Icon } from "@heroicons/react/outline";
+import { ChartPieIcon, MenuAlt1Icon } from "@heroicons/react/outline";
 import { BookOpenIcon, KeyIcon, UserCircleIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import { Fragment, SVGProps, useEffect, useState } from "react";
@@ -27,6 +27,12 @@ const navigation = [
     routes: ["/changepassword"],
     name: "Thay đổi mật khẩu",
     icon: KeyIcon,
+    current: false,
+  },
+  {
+    routes: ["/account/user"],
+    name: "Thông tin đóng góp",
+    icon: ChartPieIcon,
     current: false,
   },
 ];

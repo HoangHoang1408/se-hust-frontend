@@ -123,7 +123,10 @@ const DanhSachKhoanPhi = (props: Props) => {
               </button>
               <button
                 onClick={() => {
-                  navigate(`/account/edit/${data["id"]}`);
+                  if (data["loaiPhi"] == LoaiPhi.UngHo)
+                    navigate(`/account/add/${data["id"]}`);
+                  if (data["loaiPhi"] == LoaiPhi.BatBuoc)
+                    navigate(`/account/edit/${data["id"]}`);
                 }}
                 className="font-semibold text-indigo-500 cursor-pointer hover:text-indigo-700 p-1 hover:bg-indigo-300 text-left rounded transition w-fit"
               >
@@ -155,7 +158,7 @@ const DanhSachKhoanPhi = (props: Props) => {
               setText={(v) => setByState((pre) => ({ ...pre, tenKhoanPhi: v }))}
             />
             <button
-              onClick={() => navigate("/account")}
+              onClick={() => navigate("/account/add")}
               className="w-fit h-fit flex my-auto justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
             >
               Thêm mới

@@ -103,7 +103,7 @@ const EditDongGop: FC<Props> = () => {
       </div>
       <div className="pt-5 flex justify-end space-x-3">
         <button
-          onClick={() => navigate("/account")}
+          onClick={() => navigate("/account/show")}
           type="button"
           className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
