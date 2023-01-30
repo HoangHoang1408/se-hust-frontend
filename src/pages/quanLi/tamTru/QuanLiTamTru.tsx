@@ -87,12 +87,14 @@ const QuanLiTamTru = (props: Props) => {
       {
         Header: "Ngày hết hạn",
         // @ts-ignore
-        accessor: (row) =>
-          new Date(row["ngayHetHanTamTru"]).toLocaleDateString("vi", {
+        accessor: (row) => {
+          if (!row["ngayHetHanTamTru"]) return "Không xác định";
+          return new Date(row["ngayHetHanTamTru"]).toLocaleDateString("vi", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
-          }),
+          });
+        },
       },
     ];
   }, []);
