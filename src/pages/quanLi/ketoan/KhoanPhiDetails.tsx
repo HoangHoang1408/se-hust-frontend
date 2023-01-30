@@ -247,27 +247,6 @@ const KhoanPhiDetails: FC<Props> = () => {
             >
               Trở về
             </button>
-            <button
-              onClick={() => {
-                if (
-                  dataKhoanPhi.xemKhoanPhiChiTietChoNguoiQuanLi.khoanphi
-                    ?.loaiPhi == LoaiPhi.UngHo
-                )
-                  navigate(
-                    `/account/add/data.xemKhoanPhiChiTietChoNguoiQuanLi.khoanPhi.Id`
-                  );
-                if (
-                  dataKhoanPhi.xemKhoanPhiChiTietChoNguoiQuanLi.khoanphi
-                    ?.loaiPhi == LoaiPhi.BatBuoc
-                )
-                  navigate(
-                    `/account/edit/data.xemKhoanPhiChiTietChoNguoiQuanLi.khoanPhi.Id`
-                  );
-              }}
-              className=" px-5 py-2 bg-indigo-600 rounded-lg text-white font-semibold hover:bg-indigo-700 mx-5"
-            >
-              Cập nhật
-            </button>
           </div>
         </div>
       )}

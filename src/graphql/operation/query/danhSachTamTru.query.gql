@@ -13,7 +13,7 @@ query XemDanhSachTamTru($input: XemDanhSachTamTruInput!) {
       id
       createdAt
       updatedAt
-      nguoiTamTru{
+      nguoiTamTru {
         ...UserFragment
       }
     }
