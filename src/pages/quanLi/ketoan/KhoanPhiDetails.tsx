@@ -35,11 +35,12 @@ const KhoanPhiDetails: FC<Props> = () => {
   const { data: dataKhoanPhi, loading } = useKhoanPhiDetailsQuery({
     variables: {
       input: {
-        khoanPhiId: params.id!,
+        khoanPhiId: +params.id!,
       },
     },
     onCompleted(data) {
       const { xemKhoanPhiChiTietChoNguoiQuanLi } = data;
+      console.log(dataKhoanPhi);
       if (xemKhoanPhiChiTietChoNguoiQuanLi.error) {
         toast.error(xemKhoanPhiChiTietChoNguoiQuanLi.error.message);
         return;

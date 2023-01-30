@@ -6,6 +6,7 @@ fragment DongGopFragment on DongGop {
   nguoiTamTru {
     id
     canCuocCongDan
+    ten
   }
   hoKhau {
     id
