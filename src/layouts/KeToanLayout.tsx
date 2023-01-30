@@ -5,27 +5,21 @@ import { userVar } from "../apollo/reactiveVar/loginStatusVar";
 import { VaitroNguoiDung } from "../graphql/generated/schema";
 
 import { MenuAlt1Icon, UserCircleIcon } from "@heroicons/react/outline";
-import { ChartBarIcon, ChartPieIcon } from "@heroicons/react/solid";
+import { ChartBarIcon } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
 
 const navigation = [
   {
-    routes: ["/thongtin"],
-    name: "Thông tin cá nhân",
-    icon: UserCircleIcon,
-    current: false,
-  },
-  {
     routes: ["/account/show"],
-    name: "Kế toán",
+    name: "Quản lí thu phí",
     icon: ChartBarIcon,
     current: false,
   },
   {
-    routes: ["/account/user"],
-    name: "Thông tin đóng góp",
-    icon: ChartPieIcon,
+    routes: ["/"],
+    name: "Cá nhân",
+    icon: UserCircleIcon,
     current: false,
   },
 ];
@@ -43,7 +37,7 @@ const KeToanLayout = (props: Props) => {
   const [navState, setNavState] = useState<NavState[]>(navigation);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = useReactiveVar(userVar);
-  
+
   useEffect(() => {
     if (user && user.vaiTroNguoiDung !== VaitroNguoiDung.KeToan) navigate("/");
   }, [user]);

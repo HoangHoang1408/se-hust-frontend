@@ -4,26 +4,17 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { userVar } from "../apollo/reactiveVar/loginStatusVar";
 import { VaitroNguoiDung } from "../graphql/generated/schema";
 
-import {
-  MenuAlt1Icon,
-  TableIcon,
-  UserGroupIcon,
-} from "@heroicons/react/outline";
+import { MenuAlt1Icon, UserGroupIcon } from "@heroicons/react/outline";
 import {
   BookOpenIcon,
   ChartSquareBarIcon,
   IdentificationIcon,
+  UserCircleIcon,
 } from "@heroicons/react/solid";
 import { cloneDeep } from "lodash";
 import DesktopSidebar from "../components/pages/managerPage/DesktopSidebar";
 
 const navigation = [
-  // {
-  //   routes: ["/admin", "/admin/rentings", RegExp("/admin/rentings/*")],
-  //   name: "Quản lí đơn thuê",
-  //   icon: TableIcon,
-  //   current: true,
-  // },
   {
     routes: ["/manager"],
     name: "Thống kê",
@@ -52,6 +43,12 @@ const navigation = [
     routes: ["/manager/tamvang", RegExp("^/manager/tamvang/*")],
     name: "Quản lí tạm vắng",
     icon: IdentificationIcon,
+    current: false,
+  },
+  {
+    routes: ["/"],
+    name: "Cá nhân",
+    icon: UserCircleIcon,
     current: false,
   },
 ];

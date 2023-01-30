@@ -51,7 +51,7 @@ const CapNhatHoKhau: FC = () => {
     useCapNhatHoKhauMutation({
       onCompleted: (data) => {
         if (data.capNhatHoKhau.ok) {
-          toast.success("Thêm hộ khẩu thành công");
+          toast.success("Cập nhật hộ khẩu thành công");
           setThanhVienMoi([]);
           setThanhVienXoa([]);
           setNguoiYeuCau(undefined);
